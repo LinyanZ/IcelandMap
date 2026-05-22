@@ -57,8 +57,10 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:6px;font-size:0.66rem;font-weight:600}
 .t-drv{background:#fef8ec;color:#b07c1a;border:1px solid #f5e6c0}
 .t-dur{background:#ecf9f3;color:#1a7a4c;border:1px solid #c8edda}
+.t-dep{background:#eef0fb;color:#4a50a0;border:1px solid #d0d5f0}
 .t-bk{background:#f5ecfb;color:#7b3fa0;border:1px solid #e4cdf2}
 .t-wrn{background:#fef0ee;color:#c53030;border:1px solid #fcd5d0}
+.route-txt{font-size:0.72rem;color:#555;line-height:1.5;padding:2px 0}
 
 .sec{margin-bottom:12px}
 .sec-t{font-size:0.66rem;font-weight:700;color:#1d1d1f;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
@@ -94,19 +96,19 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
  <path class="road" :d="roadPath"/>
  <path class="road-dash" :d="roadPath"/>
  <!-- Cities -->
- <g v-for="c in cities" :key="c.n">
-  <circle class="city-dot" :cx="c.x" :cy="c.y" r="2"/>
-  <text class="city-label" :x="c.x+c.ox" :y="c.y+c.oy">{{c.n}}</text>
+ <g v-for="c in cities" :key="c.n" :transform="'translate('+c.x+','+c.y+') scale('+spotScale+')'">
+  <circle class="city-dot" cx="0" cy="0" r="2"/>
+  <text class="city-label" :x="c.ox" :y="c.oy">{{c.n}}</text>
  </g>
  <!-- Spots -->
  <g v-for="s in visibleSpots" :key="s.id" class="spot" :class="{active:hId===s.id}"
-    :transform="'translate('+s.x+','+s.y+')'"
+    :transform="'translate('+s.x+','+s.y+') scale('+spotScale+')'"
     @pointerenter="enter(s,$event)" @pointerleave="leave">
   <circle class="hit" cx="0" cy="0" r="10"/>
   <circle class="ring" cx="0" cy="0" r="8" :stroke="s.color"/>
   <circle class="dot" cx="0" cy="0" r="4" :fill="s.color"/>
   <text class="num" x="0" y="0.3" text-anchor="middle" dominant-baseline="central">{{s.id}}</text>
-  <text v-if="s.sl" class="lbl" :x="s.lx||7" :y="s.ly||-3" :fill="s.color">{{s.sn}}</text>
+  <text class="lbl" :x="s.lx||7" :y="s.ly||-3" :fill="s.color">{{s.name}}</text>
  </g>
 </svg>
 <div class="controls">
@@ -126,10 +128,12 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
  </div>
  <div class="tags">
   <span class="tag t-drv">{{tip.drv}}</span>
-  <span class="tag t-dur">{{tip.dur}}</span>
+  <span class="tag t-dur">停留 {{tip.dur}}</span>
+  <span v-if="tip.dep" class="tag t-dep">{{tip.dep}}</span>
   <span v-if="tip.bk" class="tag t-bk">需预约</span>
   <span v-if="tip.wrn" class="tag t-wrn">注意安全</span>
  </div>
+ <div v-if="tip.route" class="sec"><div class="sec-t">交通</div><div class="route-txt">{{tip.route}}</div></div>
  <div class="sec"><div class="sec-t">必打卡</div><ul><li v-for="h in tip.hl">{{h}}</li></ul></div>
  <div class="sec"><div class="sec-t">拍照机位</div><ul><li v-for="p in tip.ph">{{p}}</li></ul></div>
  <div class="sec" v-if="tip.rest?.length"><div class="sec-t">餐厅</div><div v-for="r in tip.rest" class="row"><span class="row-n">{{r.n}}</span><span class="row-p">{{r.p}}</span></div><div v-if="tip.rest[0]?.r" class="rec">推荐: {{tip.rest[0].r}}</div></div>
@@ -147,52 +151,64 @@ const landPath=`M759.9,26.2 L741.2,26.8 L734.6,32.6 L727.2,30.1 L720.1,29 L710.2
 const roadPath=`M 200,470 C 250,490 300,520 360,545 C 420,565 470,570 500,567 C 530,563 560,548 590,535 C 620,520 650,500 680,475 C 710,455 740,450 770,448 C 800,445 830,430 860,400 C 880,375 900,350 910,320 C 920,290 925,260 920,230 C 915,200 905,175 885,155 C 865,135 840,120 810,110 C 780,100 750,95 720,93 C 690,91 660,95 630,100 C 600,106 575,115 550,130 C 525,145 500,155 475,160 C 450,165 425,168 400,170 C 375,172 350,175 325,180 C 300,185 275,195 255,210 C 235,225 220,245 210,270 C 200,295 195,320 193,350 C 191,380 192,410 195,435 C 198,455 200,465 200,470 Z`;
 
 const days=[
-{id:'1-2',color:'#d4820f',label:'Day1-2 黄金圈'},
-{id:'3',color:'#34a06c',label:'Day3 南海岸'},
-{id:'4',color:'#0077b6',label:'Day4 冰川'},
-{id:'5',color:'#7b3fa0',label:'Day5 东峡湾'},
-{id:'6',color:'#c4561a',label:'Day6 钻石圈'},
-{id:'7',color:'#b3446c',label:'Day7 北→西'},
-{id:'8',color:'#4a8c2a',label:'Day8 斯奈山'},
+{id:'1-2',color:'#c4561a',label:'9.28-29 北部(单人)'},
+{id:'3',color:'#6366f1',label:'9.30 雷市·蓝湖'},
+{id:'4',color:'#d4820f',label:'10.1 黄金圈'},
+{id:'5',color:'#4a8c2a',label:'10.2 斯奈山'},
+{id:'6',color:'#34a06c',label:'10.3 南海岸'},
+{id:'7',color:'#0077b6',label:'10.4 冰川冰湖'},
+{id:'8',color:'#8b5cf6',label:'10.5 返程'},
+{id:'x',color:'#9ca3af',label:'其他景点'},
 ];
 
 const cities=[
-{n:'Reykjavík',x:247,y:437,ox:5,oy:-5},
-{n:'Akureyri',x:578,y:175,ox:5,oy:-4},
-{n:'Vík',x:499,y:562,ox:4,oy:8},
-{n:'Höfn',x:827,y:420,ox:4,oy:-4},
-{n:'Egilsstaðir',x:897,y:249,ox:-42,oy:-5},
-{n:'KEF',x:187,y:468,ox:4,oy:5},
+{n:'雷克雅未克',x:247,y:437,ox:5,oy:-5},
+{n:'阿克雷里',x:578,y:175,ox:5,oy:-4},
+{n:'维克',x:499,y:562,ox:4,oy:8},
+{n:'赫本',x:827,y:420,ox:4,oy:-4},
+{n:'埃伊尔斯塔济',x:897,y:249,ox:-42,oy:-5},
+{n:'凯夫拉维克机场',x:187,y:468,ox:4,oy:5},
 ];
 
 const spots=ref([
-{id:1,x:247,y:437,day:'1',color:'#d4820f',name:'哈尔格林姆斯大教堂',en:'Hallgrímskirkja',sn:'Reykjavík',sl:false,drv:'机场出发 50min',dur:'1-1.5h',bk:false,wrn:false,hl:['登塔俯瞰雷克雅未克全景（1000 ISK）','教堂正面对称建筑摄影','周边彩虹街购物'],ph:['教堂正面广角仰拍','塔顶360°全城俯瞰','雕像剪影'],rest:[{n:'Bæjarins Beztu Pylsur',p:'600 ISK',r:'国民热狗加全套酱'},{n:'Icelandic Street Food',p:'2500 ISK',r:'羊肉汤面包碗可续'},{n:'Messinn',p:'4000 ISK',r:'铁锅鱼'}],htl:[{n:'CenterHotel Miðgarður',p:'~25000 ISK'},{n:'Loft Hostel',p:'~12000 ISK'}],notes:['推荐上午去，光线好游客少','晚上去Grótta灯塔找极光']},
-{id:2,x:317,y:418,day:'2',color:'#d4820f',name:'辛格韦德利国家公园',en:'Þingvellir',sn:'Þingvellir',sl:true,lx:7,ly:-4,drv:'雷克雅未克 45min',dur:'1.5h',bk:false,wrn:false,hl:['欧美板块裂缝行走','世界最古老议会遗址','Öxarárfoss瀑布'],ph:['板块裂缝仰拍岩壁','Öxarárfoss长曝光','俯瞰湖面观景台'],rest:[],htl:[],notes:['停车费750 ISK','Silfra浮潜需提前预约','上午光线最佳']},
-{id:3,x:388,y:410,day:'2',color:'#d4820f',name:'盖歇尔间歇泉',en:'Geysir',sn:'Geysir',sl:true,lx:7,ly:-4,drv:'Þingvellir→50min',dur:'1h',bk:false,wrn:false,hl:['Strokkur每5-10min喷发','高达20-30米'],ph:['东南侧拍蓝色气泡膨胀','连拍喷发全过程'],rest:[{n:'Geysir Glima',p:'3500 ISK',r:'羊肉汤+面包'}],htl:[],notes:['免费','⚠ 地热滚烫不离开步道']},
-{id:4,x:403,y:406,day:'2',color:'#d4820f',name:'黄金瀑布',en:'Gullfoss',sn:'Gullfoss',sl:true,lx:7,ly:-4,drv:'间歇泉→10min',dur:'1h',bk:false,wrn:false,hl:['两级瀑布落入峡谷','水雾彩虹'],ph:['上层观景台全景','下层近距离冲击感'],rest:[{n:'Gullfoss Kaffi',p:'2500 ISK',r:'羊肉汤蛋糕'}],htl:[],notes:['免费','10月下层可能关闭','⚠ 穿防水外套']},
-{id:5,x:347,y:456,day:'2',color:'#d4820f',name:'Kerið火山口湖',en:'Kerið',sn:'Kerið',sl:true,lx:7,ly:-4,drv:'Gullfoss→40min',dur:'30min',bk:false,wrn:false,hl:['3000年火山口','红岩壁+蓝绿湖'],ph:['边缘俯拍全景','湖边仰视'],rest:[],htl:[],notes:['门票400 ISK','20-30min绕一圈']},
-{id:6,x:203,y:483,day:'2',color:'#d4820f',name:'蓝湖温泉',en:'Blue Lagoon',sn:'Blue Lagoon',sl:true,lx:-52,ly:7,drv:'Kerið→1h',dur:'2h',bk:true,wrn:false,hl:['乳蓝色地热温泉','免费硅泥面膜','温泉酒吧'],ph:['硅泥面膜自拍','日落蒸汽暖光'],rest:[{n:'Lava Restaurant',p:'8000 ISK',r:'高端冰岛料理'}],htl:[{n:'Silica Hotel',p:'~60000 ISK'}],notes:['⚠ 必须提前1-2周网上预约','Comfort 9990 ISK起','进入前必须裸体淋浴','距机场20min']},
-{id:7,x:415,y:528,day:'3',color:'#34a06c',name:'塞里雅兰瀑布',en:'Seljalandsfoss',sn:'Seljalandsfoss',sl:true,lx:-55,ly:-5,drv:'KEF→1.5h',dur:'1h',bk:false,wrn:false,hl:['可从背后穿过的瀑布','旁边Gljúfrabúi秘密瀑布'],ph:['背后向外拍剪影','正面45°含彩虹','Gljúfrabúi岩缝广角'],rest:[],htl:[],notes:['停车费800 ISK','⚠ 穿全防水！背后极湿滑','10月可能关闭背后通道','上午有彩虹']},
-{id:8,x:456,y:543,day:'3',color:'#34a06c',name:'森林瀑布',en:'Skógafoss',sn:'Skógafoss',sl:true,lx:7,ly:-4,drv:'Seljalandsfoss→30min',dur:'1h',bk:false,wrn:false,hl:['宽25m落差60m','楼梯登顶俯瞰','正午双彩虹'],ph:['正面近距离水雾','登顶俯拍+草地','人物比例照'],rest:[{n:'Skógakaffi',p:'2500 ISK',r:'羊肉汤'}],htl:[],notes:['免费','370级台阶','正午彩虹几率高']},
-{id:9,x:494,y:566,day:'3',color:'#34a06c',name:'黑沙滩',en:'Reynisfjara',sn:'Reynisfjara',sl:true,lx:7,ly:7,drv:'Skógafoss→40min',dur:'1-1.5h',bk:false,wrn:true,hl:['玄武岩柱洞穴','黑沙+白浪花','海蚀柱'],ph:['洞穴框架构图','长曝光覆盖黑沙','海蚀柱长焦'],rest:[{n:'Black Beach Restaurant',p:'4500 ISK',r:'海鲜汤'}],htl:[],notes:['⚠ 杀人浪极危险！已有游客遇难','⚠ 绝不背对大海！保持30m','下午光线最佳']},
-{id:10,x:489,y:566,day:'3',color:'#34a06c',name:'迪霍拉里海岬',en:'Dyrhólaey',sn:'',sl:false,drv:'黑沙滩→10min',dur:'30min',bk:false,wrn:false,hl:['天然石拱门','灯塔俯瞰全景'],ph:['灯塔旁俯拍全景','石拱门特写'],rest:[],htl:[{n:'Hotel Kría (Vík)',p:'~35000 ISK'},{n:'Puffin Hostel',p:'~18000 ISK'}],notes:['风极大注意安全','今晚住Vík']},
-{id:11,x:572,y:502,day:'4',color:'#0077b6',name:'Fjaðrárgljúfur峡谷',en:'Fjaðrárgljúfur',sn:'Fjaðrárgljúfur',sl:true,lx:7,ly:-4,drv:'Vík→40min',dur:'45min',bk:false,wrn:false,hl:['100m深蜿蜒苔藓峡谷','权游取景地'],ph:['步道尽头俯拍S形','中段侧拍深邃感'],rest:[],htl:[],notes:['免费','偶尔保护关闭查road.is','步道30-40min']},
-{id:12,x:675,y:451,day:'4',color:'#0077b6',name:'冰川徒步',en:'Skaftafell',sn:'Skaftafell',sl:true,lx:-38,ly:-5,drv:'峡谷→1h',dur:'2.5-3h',bk:true,wrn:false,hl:['踩千年冰川','蓝冰冰裂缝','10月可能进冰洞'],ph:['蓝冰偏振镜特写','冰川上回望山谷','冰裂缝自拍'],rest:[{n:'游客中心',p:'3000 ISK',r:'简餐'}],htl:[],notes:['⚠ 必须跟团不可自行上冰川','guidetoiceland.is预约','12000-15000 ISK/人','穿登山鞋+防水裤']},
-{id:13,x:743,y:449,day:'4',color:'#0077b6',name:'冰河湖',en:'Jökulsárlón',sn:'Jökulsárlón',sl:true,lx:7,ly:-5,drv:'Skaftafell→1h',dur:'1-1.5h',bk:false,wrn:false,hl:['漂浮千年蓝色冰山','海豹出没','冰山入海口'],ph:['长焦冰山细节','广角冰山群+冰川','黄昏金光蓝冰'],rest:[],htl:[],notes:['免费','船游6000-9000 ISK，10月确认','下午光线最佳']},
-{id:14,x:743,y:456,day:'4',color:'#0077b6',name:'钻石沙滩',en:'Diamond Beach',sn:'',sl:false,drv:'对面马路',dur:'45min',bk:false,wrn:true,hl:['黑沙透明冰块如钻石','日落闪耀'],ph:['低角度逆光冰块剪影','冰块水晶特写','浪花冲刷瞬间'],rest:[],htl:[{n:'Hotel Höfn',p:'~30000 ISK'},{n:'Pakkhús必吃龙虾',p:'~5000 ISK'}],notes:['⚠ 远离海浪！','日落前1h最美','今晚住Höfn吃龙虾！']},
-{id:15,x:908,y:351,day:'5',color:'#7b3fa0',name:'Djúpivogur小镇',en:'Djúpivogur',sn:'Djúpivogur',sl:true,lx:-45,ly:-5,drv:'Höfn→1h',dur:'30min',bk:false,wrn:false,hl:['鸟蛋雕塑群','宁静渔港'],ph:['鸟蛋+峡湾背景','港口彩色小船'],rest:[{n:'Við Voginn',p:'3500 ISK',r:'鱼汤'}],htl:[],notes:['在Höfn加满油！','弯路多40-60km/h','注意野生驯鹿']},
-{id:16,x:930,y:247,day:'5',color:'#7b3fa0',name:'蓝色教堂小镇',en:'Seyðisfjörður',sn:'Seyðisfjörður',sl:true,lx:-50,ly:8,drv:'Egilsstaðir翻山30min',dur:'45min',bk:false,wrn:false,hl:['蓝色教堂+彩虹路','彩色木屋+峡湾倒影'],ph:['彩虹路+教堂经典','峡湾倒影','山顶俯瞰全景'],rest:[{n:'Nordic Restaurant',p:'4000 ISK',r:'当地鱼类'}],htl:[{n:'Icelandair Hotel',p:'~28000 ISK'},{n:'Lyngás Guesthouse',p:'~16000 ISK'}],notes:['翻山10月可能有雪','30-45min够逛','晚上湖边找极光']},
-{id:17,x:726,y:153,day:'6',color:'#c4561a',name:'黛提瀑布',en:'Dettifoss',sn:'Dettifoss',sl:true,lx:7,ly:-5,drv:'Egilsstaðir→1.5h',dur:'1h',bk:false,wrn:false,hl:['欧洲水量最大瀑布','宽100m落差44m','普罗米修斯取景地'],ph:['东岸正面俯拍经典','边缘近距离','Selfoss马蹄形'],rest:[],htl:[],notes:['走862号柏油路','864号10月可能封','风大穿暖','上午顺光']},
-{id:18,x:681,y:189,day:'6',color:'#c4561a',name:'米湖区域',en:'Mývatn',sn:'Mývatn',sl:true,lx:-26,ly:-7,drv:'Dettifoss→1h',dur:'4-5h',bk:false,wrn:false,hl:['Námaskarð火星地热','Dimmuborgir熔岩迷宫','Grjótagjá地洞温泉','Nature Baths泡温泉看极光'],ph:['地热彩色地面+蒸汽剪影','熔岩拱门','洞内蓝水反光','温泉中拍极光'],rest:[{n:'Vogafjós Cow Shed',p:'4000 ISK',r:'地热面包+奶酪'},{n:"Daddi's Pizza",p:'2500 ISK',r:''}],htl:[],notes:['Námaskarð免费不离开步道','Grjótagjá禁止下水','温泉5500 ISK，17:30去等极光']},
-{id:19,x:625,y:175,day:'6',color:'#c4561a',name:'众神瀑布',en:'Goðafoss',sn:'Goðafoss',sl:true,lx:-32,ly:-5,drv:'米湖→30min',dur:'45min',bk:false,wrn:false,hl:['半环形优雅瀑布','公元1000年投神像处'],ph:['东岸半环形全景','西岸俯拍含人','长曝光丝滑'],rest:[{n:'Strikið (Akureyri)',p:'6000 ISK',r:'高端海鲜'},{n:'Rub23',p:'5000 ISK',r:'寿司烤肉'}],htl:[{n:'Hotel Akureyri',p:'~30000 ISK'},{n:'Backpackers',p:'~16000 ISK'}],notes:['免费','东岸经典','今晚住阿克雷里']},
-{id:20,x:359,y:189,day:'7',color:'#b3446c',name:'犀牛石',en:'Hvítserkur',sn:'Hvítserkur',sl:true,lx:7,ly:-5,drv:'阿克雷里→2.5h',dur:'45min',bk:false,wrn:false,hl:['15m玄武岩似犀牛饮水','退潮更壮观'],ph:['悬崖俯拍','退潮沙滩近景','日落剪影'],rest:[{n:'Brimslóð Atelier',p:'3500 ISK',r:'鱼汤甜点'}],htl:[],notes:['陡峭楼梯（10月可能滑）','查潮汐表']},
-{id:21,x:178,y:279,day:'7',color:'#b3446c',name:'Stykkishólmur',en:'Stykkishólmur',sn:'Stykkishólmur',sl:true,lx:7,ly:-4,drv:'Blönduós→2.5h',dur:'1h',bk:false,wrn:false,hl:['彩色渔港','Súgandisey灯塔','白日梦想家取景地'],ph:['港口彩色房屋','灯塔+海景'],rest:[{n:'Narfeyrarstofa',p:'5000 ISK',r:'本地贝类'}],htl:[{n:'Hótel Fransiskus',p:'~28000 ISK'},{n:'Grundarfjörður Hostel',p:'~15000 ISK'}],notes:['今晚住斯奈山','极光好去Kirkjufell！']},
-{id:22,x:128,y:302,day:'8',color:'#4a8c2a',name:'草帽山',en:'Kirkjufell',sn:'Kirkjufell',sl:true,lx:-36,ly:-5,drv:'住处5-20min',dur:'1-1.5h',bk:false,wrn:false,hl:['冰岛最标志性山峰','权游箭头山','NO.1极光地'],ph:['经典：瀑布前景+山背景','日出金光','极光三合一'],rest:[],htl:[],notes:['免费','清晨人最少','⚠ 不要爬山！','三脚架必备']},
-{id:23,x:122,y:322,day:'8',color:'#4a8c2a',name:'Búðir黑教堂',en:'Búðakirkja',sn:'Búðir',sl:true,lx:-22,ly:8,drv:'Kirkjufell→40min',dur:'30min',bk:false,wrn:false,hl:['荒野孤独黑教堂','雪山+熔岩原背景'],ph:['正面+雪山','侧面+苔藓','阴天末世感'],rest:[{n:'Hotel Búðir',p:'6000 ISK',r:'高端料理'}],htl:[{n:'Hotel Búðir',p:'~40000 ISK'}],notes:['内部不开放','外部24h可拍']},
-{id:24,x:102,y:331,day:'8',color:'#4a8c2a',name:'Arnarstapi海岸',en:'Arnarstapi',sn:'Arnarstapi',sl:false,drv:'Búðir→15min',dur:'1h',bk:false,wrn:false,hl:['Gatklettur石拱门','海蚀洞+悬崖','步道2.5km'],ph:['石拱门框入大海','海浪冲击悬崖'],rest:[{n:'Fjöruhúsið Café',p:'2500 ISK',r:'海边岩洞咖啡'}],htl:[],notes:['免费','10月风大穿暖']},
-{id:25,x:78,y:334,day:'8',color:'#4a8c2a',name:'黑珍珠沙滩',en:'Djúpalónssandur',sn:'Djúpalónssandur',sl:true,lx:-60,ly:-3,drv:'Arnarstapi→20min',dur:'45min',bk:false,wrn:false,hl:['黑色鹅卵石','沉船残骸','力量试炼石'],ph:['黑卵石+浪花','沉船铁片','试炼石互动'],rest:[],htl:[],notes:['⚠ 不要带走石头','⚠ 浪大远离海边']},
-{id:26,x:88,y:338,day:'8',color:'#4a8c2a',name:'Lóndrangar',en:'Lóndrangar',sn:'',sl:false,drv:'5min',dur:'30min',bk:false,wrn:false,hl:['75m+61m双海蚀柱'],ph:['悬崖步道拍双柱'],rest:[],htl:[],notes:['免费']},
-{id:27,x:83,y:321,day:'8',color:'#4a8c2a',name:'Saxhóll火山口',en:'Saxhóll',sn:'',sl:false,drv:'15min',dur:'30min',bk:false,wrn:false,hl:['金属楼梯登顶','360°冰川+熔岩原'],ph:['火山口内俯拍','顶部全景'],rest:[{n:'Bjargarsteinn Mathús',p:'5000 ISK',r:'海鲜羊排'}],htl:[],notes:['免费','100级轻松','之后回雷克雅未克~2.5h']},
+{id:1,x:625,y:175,day:'1',color:'#c4561a',name:'众神瀑布',en:'Goðafoss',sn:'Goðafoss',sl:true,lx:-32,ly:-5,drv:'车程 35min',dep:'建议 09:00出发',dur:'45min',bk:false,wrn:false,route:'从雷市国内机场(RKV)乘Icelandair飞阿克雷里，航程45min，每天3-4班，最早07:10起飞。到达后机场取车，沿1号公路东行35min即到。',hl:['半环形优雅瀑布','公元1000年投神像处'],ph:['东岸半环形全景','西岸俯拍含人','长曝光丝滑'],rest:[{n:'Strikið (Akureyri)',p:'6000 ISK',r:'高端海鲜'},{n:'Rub23',p:'5000 ISK',r:'寿司烤肉'}],htl:[{n:'Hotel Akureyri',p:'~30000 ISK'},{n:'Backpackers',p:'~16000 ISK'}],notes:['免费','东岸经典','单程机票约$100-120']},
+{id:2,x:681,y:189,day:'1',color:'#c4561a',name:'米湖区域',en:'Mývatn',sn:'Mývatn',sl:true,lx:-26,ly:-7,drv:'车程 30min',dep:'建议 10:30到达',dur:'4-5h',bk:false,wrn:false,route:'从众神瀑布继续沿1号公路东行30min即到米湖区域。建议游览顺序：Námaskarð地热→Dimmuborgir熔岩→Grjótagjá洞穴→傍晚泡Nature Baths。',hl:['Námaskarð火星地热','Dimmuborgir熔岩迷宫','Grjótagjá地洞温泉','Nature Baths泡温泉看极光'],ph:['地热彩色地面+蒸汽剪影','熔岩拱门','洞内蓝水反光','温泉中拍极光'],rest:[{n:'Vogafjós Cow Shed',p:'4000 ISK',r:'地热面包+奶酪'},{n:"Daddi's Pizza",p:'2500 ISK',r:''}],htl:[{n:'Fosshotel Mývatn',p:'~28000 ISK'}],notes:['Námaskarð免费不离开步道','Grjótagjá禁止下水','温泉5500 ISK，17:30去等极光']},
+{id:3,x:726,y:153,day:'2',color:'#c4561a',name:'黛提瀑布',en:'Dettifoss',sn:'Dettifoss',sl:true,lx:7,ly:-5,drv:'车程 45min',dep:'建议 08:00出发',dur:'1h',bk:false,wrn:false,route:'从米湖住处沿862号柏油公路北行45min。864号路更近但10月可能封闭，务必走862。游览后原路返回阿克雷里约1.5h，赶下午航班飞回雷市。',hl:['欧洲水量最大瀑布','宽100m落差44m','普罗米修斯取景地'],ph:['东岸正面俯拍经典','边缘近距离','Selfoss马蹄形'],rest:[],htl:[],notes:['走862号柏油路','864号10月可能封','风大穿暖','上午顺光','之后返回阿克雷里飞雷市']},
+{id:4,x:247,y:437,day:'3',color:'#6366f1',name:'哈尔格林姆斯大教堂',en:'Hallgrímskirkja',sn:'Reykjavík',sl:false,drv:'车程 50min',dep:'建议 10:00到达',dur:'1-1.5h',bk:false,wrn:false,route:'9.30四人汇合日。从KEF机场取车沿41号公路开往雷市市区约50min。教堂就在市中心山丘上，停车场在教堂旁。',hl:['登塔俯瞰雷克雅未克全景（1000 ISK）','教堂正面对称建筑摄影','周边彩虹街购物'],ph:['教堂正面广角仰拍','塔顶360°全城俯瞰','雕像剪影'],rest:[{n:'Bæjarins Beztu Pylsur',p:'600 ISK',r:'国民热狗加全套酱'},{n:'Icelandic Street Food',p:'2500 ISK',r:'羊肉汤面包碗可续'},{n:'Messinn',p:'4000 ISK',r:'铁锅鱼'}],htl:[{n:'CenterHotel Miðgarður',p:'~25000 ISK'},{n:'Loft Hostel',p:'~12000 ISK'}],notes:['推荐上午去，光线好游客少','晚上去Grótta灯塔找极光']},
+{id:5,x:250,y:442,day:'3',color:'#6366f1',name:'彩虹大街',en:'Skólavörðustígur',sn:'彩虹街',sl:true,lx:7,ly:5,drv:'步行 2min',dep:'',dur:'30min',bk:false,wrn:false,route:'从大教堂正门出来下坡步行2min即到。彩虹彩绘路面从教堂一直延伸到海边。',hl:['彩虹彩绘街道','通往大教堂的彩色台阶','两侧独立小店和咖啡馆'],ph:['从下方仰拍彩虹路+教堂','彩色路面特写','街边咖啡馆'],rest:[{n:'Reykjavik Roasters',p:'800 ISK',r:'精品咖啡'},{n:'Bæjarins Beztu',p:'600 ISK',r:'热狗'}],htl:[],notes:['免费','与大教堂一起逛','纪念品店集中区域']},
+{id:6,x:203,y:483,day:'3',color:'#6366f1',name:'蓝湖温泉',en:'Blue Lagoon',sn:'Blue Lagoon',sl:true,lx:-52,ly:7,drv:'车程 50min',dep:'建议 14:00出发',dur:'2h',bk:true,wrn:false,route:'从雷市市区沿41号公路往机场方向开约50min。蓝湖在凯夫拉维克半岛上，距KEF机场仅20min。',hl:['乳蓝色地热温泉','免费硅泥面膜','温泉酒吧'],ph:['硅泥面膜自拍','日落蒸汽暖光'],rest:[{n:'Lava Restaurant',p:'8000 ISK',r:'高端冰岛料理'}],htl:[{n:'Silica Hotel',p:'~60000 ISK'}],notes:['⚠ 必须提前1-2周网上预约','Comfort 9990 ISK起','进入前必须裸体淋浴','距机场20min']},
+{id:7,x:317,y:418,day:'4',color:'#d4820f',name:'辛格韦德利国家公园',en:'Þingvellir',sn:'Þingvellir',sl:true,lx:7,ly:-4,drv:'车程 45min',dep:'建议 08:30出发',dur:'1.5h',bk:false,wrn:false,route:'从雷市沿1号转36号公路东北行45min。停车场P1最近入口，P2靠近裂缝。',hl:['欧美板块裂缝行走','世界最古老议会遗址','Öxarárfoss瀑布'],ph:['板块裂缝仰拍岩壁','Öxarárfoss长曝光','俯瞰湖面观景台'],rest:[],htl:[],notes:['停车费750 ISK','Silfra浮潜需提前预约','上午光线最佳']},
+{id:8,x:388,y:410,day:'4',color:'#d4820f',name:'盖歇尔间歇泉',en:'Geysir',sn:'Geysir',sl:true,lx:7,ly:-4,drv:'车程 50min',dep:'建议 11:00到达',dur:'1h',bk:false,wrn:false,route:'从辛格韦德利沿365号转37号公路东行约50min。沿途风景优美经过Laugarvatn湖。',hl:['Strokkur每5-10min喷发','高达20-30米'],ph:['东南侧拍蓝色气泡膨胀','连拍喷发全过程'],rest:[{n:'Geysir Glima',p:'3500 ISK',r:'羊肉汤+面包'}],htl:[],notes:['免费','⚠ 地热滚烫不离开步道']},
+{id:9,x:403,y:406,day:'4',color:'#d4820f',name:'黄金瀑布',en:'Gullfoss',sn:'Gullfoss',sl:true,lx:7,ly:-4,drv:'车程 10min',dep:'建议 12:30到达',dur:'1h',bk:false,wrn:false,route:'从间歇泉沿35号公路继续东北行10min即到。有上下两层观景台。',hl:['两级瀑布落入峡谷','水雾彩虹'],ph:['上层观景台全景','下层近距离冲击感'],rest:[{n:'Gullfoss Kaffi',p:'2500 ISK',r:'羊肉汤蛋糕'}],htl:[],notes:['免费','10月下层可能关闭','⚠ 穿防水外套']},
+{id:10,x:369,y:418,day:'4',color:'#d4820f',name:'Bruarfoss蓝色瀑布',en:'Bruarfoss',sn:'Bruarfoss',sl:true,lx:-40,ly:-4,drv:'车程 15min',dep:'建议 14:00到达',dur:'45min',bk:false,wrn:false,route:'从黄金瀑布返回途中，沿35号公路南行回到Geysir附近后转入小路，车程约15min。停车后步行15-20min到达瀑布。',hl:['宝石蓝色瀑布水','冰岛最蓝的瀑布','隐藏宝藏景点'],ph:['正面拍蓝色水流分叉','长曝光拍丝绸般水面','侧面含苔藓前景'],rest:[],htl:[],notes:['步行约15-20min到达','路径标识不明显，提前导航','免费','建议黄金圈当天顺路去']},
+{id:11,x:347,y:456,day:'4',color:'#d4820f',name:'Kerið火山口湖',en:'Kerið',sn:'Kerið',sl:true,lx:7,ly:-4,drv:'车程 30min',dep:'建议 15:30到达',dur:'30min',bk:false,wrn:false,route:'从Bruarfoss沿37号转35号公路南行约30min。火山口就在路边，之后沿1号公路返回雷市约50min。',hl:['3000年火山口','红岩壁+蓝绿湖'],ph:['边缘俯拍全景','湖边仰视'],rest:[],htl:[],notes:['门票400 ISK','20-30min绕一圈']},
+{id:12,x:128,y:302,day:'5',color:'#4a8c2a',name:'草帽山',en:'Kirkjufell',sn:'Kirkjufell',sl:true,lx:-36,ly:-5,drv:'车程 2h15min',dep:'建议 07:30出发',dur:'1-1.5h',bk:false,wrn:false,route:'从雷市沿1号公路北行经过Borgarnes，转54号公路前往Grundarfjörður，全程约2h15min。早出发赶日出拍照最佳。',hl:['冰岛最标志性山峰','权游箭头山','NO.1极光地'],ph:['经典：瀑布前景+山背景','日出金光','极光三合一'],rest:[],htl:[],notes:['免费','清晨人最少','⚠ 不要爬山！','三脚架必备']},
+{id:13,x:86,y:312,day:'5',color:'#4a8c2a',name:'Ingjaldshólskirkja红房子',en:'Ingjaldshólskirkja',sn:'红房子',sl:true,lx:7,ly:-4,drv:'车程 25min',dep:'建议 10:30到达',dur:'20min',bk:false,wrn:false,route:'从草帽山沿54号公路西行约25min，教堂在公路旁，非常显眼。路旁即可停车拍摄。',hl:['斯奈山半岛标志性红色教堂','雪山背景下的彩色小屋','视觉冲击力极强'],ph:['红色教堂+Snæfellsjökull雪山','公路延伸线+教堂','侧面草地前景'],rest:[],htl:[],notes:['免费','公路旁即可停车拍摄','5分钟即可']},
+{id:14,x:122,y:322,day:'5',color:'#4a8c2a',name:'Búðir黑教堂',en:'Búðakirkja',sn:'Búðir',sl:true,lx:-22,ly:8,drv:'车程 40min',dep:'建议 11:15到达',dur:'30min',bk:false,wrn:false,route:'从红房子沿574号公路绕半岛南侧行驶约40min。黑教堂孤立在荒原上，非常醒目。',hl:['荒野孤独黑教堂','雪山+熔岩原背景'],ph:['正面+雪山','侧面+苔藓','阴天末世感'],rest:[{n:'Hotel Búðir',p:'6000 ISK',r:'高端料理'}],htl:[{n:'Hotel Búðir',p:'~40000 ISK'}],notes:['内部不开放','外部24h可拍']},
+{id:15,x:113,y:340,day:'5',color:'#4a8c2a',name:'Ytri Tunga海豹沙滩',en:'Ytri Tunga',sn:'海豹沙滩',sl:true,lx:7,ly:-4,drv:'车程 16min',dep:'建议 12:00到达',dur:'30-45min',bk:false,wrn:false,route:'从Búðir继续沿574号公路东行约16min。路边有小指示牌，转入小路到停车场后步行3min到沙滩。',hl:['野生海豹栖息地','金色沙滩（冰岛罕见）','近距离观察海豹'],ph:['长焦拍岩石上晒太阳的海豹','沙滩+远山全景'],rest:[],htl:[],notes:['免费','保持安静不惊扰海豹','退潮时海豹更多','6-8月最佳，10月仍有机会']},
+{id:16,x:102,y:331,day:'5',color:'#4a8c2a',name:'Arnarstapi海岸',en:'Arnarstapi',sn:'Arnarstapi',sl:false,drv:'车程 20min',dep:'建议 13:00到达',dur:'1h',bk:false,wrn:false,route:'从Ytri Tunga返回574号公路西行约20min。小镇停车后沿海岸步道行走2.5km。',hl:['Gatklettur石拱门','海蚀洞+悬崖','步道2.5km'],ph:['石拱门框入大海','海浪冲击悬崖'],rest:[{n:'Fjöruhúsið Café',p:'2500 ISK',r:'海边岩洞咖啡'}],htl:[],notes:['免费','10月风大穿暖']},
+{id:17,x:78,y:334,day:'5',color:'#4a8c2a',name:'黑珍珠沙滩',en:'Djúpalónssandur',sn:'Djúpalónssandur',sl:true,lx:-60,ly:-3,drv:'车程 20min',dep:'建议 14:30到达',dur:'45min',bk:false,wrn:false,route:'从Arnarstapi沿572号公路西行约20min到半岛最西端。之后原路返回经54号+1号公路回雷市约2.5-3h。',hl:['黑色鹅卵石','沉船残骸','力量试炼石'],ph:['黑卵石+浪花','沉船铁片','试炼石互动'],rest:[],htl:[],notes:['⚠ 不要带走石头','⚠ 浪大远离海边','之后回雷市~2.5h']},
+{id:18,x:415,y:528,day:'6',color:'#34a06c',name:'塞里雅兰瀑布',en:'Seljalandsfoss',sn:'Seljalandsfoss',sl:true,lx:-55,ly:-5,drv:'车程 1.5h',dep:'建议 08:00出发',dur:'1h',bk:false,wrn:false,route:'从雷市沿1号公路东行约1.5h。瀑布在路边非常显眼，停车场就在旁边。上午去有彩虹。',hl:['可从背后穿过的瀑布','旁边Gljúfrabúi秘密瀑布'],ph:['背后向外拍剪影','正面45°含彩虹','Gljúfrabúi岩缝广角'],rest:[],htl:[],notes:['停车费800 ISK','⚠ 穿全防水！背后极湿滑','10月可能关闭背后通道','上午有彩虹']},
+{id:19,x:456,y:543,day:'6',color:'#34a06c',name:'森林瀑布',en:'Skógafoss',sn:'Skógafoss',sl:true,lx:7,ly:-4,drv:'车程 25min',dep:'建议 10:30到达',dur:'1h',bk:false,wrn:false,route:'从塞里雅兰瀑布继续沿1号公路东行约25min。瀑布就在路旁，停车场免费。可爬370级台阶登顶。',hl:['宽25m落差60m','楼梯登顶俯瞰','正午双彩虹'],ph:['正面近距离水雾','登顶俯拍+草地','人物比例照'],rest:[{n:'Skógakaffi',p:'2500 ISK',r:'羊肉汤'}],htl:[],notes:['免费','370级台阶','正午彩虹几率高']},
+{id:20,x:494,y:566,day:'6',color:'#34a06c',name:'黑沙滩',en:'Reynisfjara',sn:'Reynisfjara',sl:true,lx:7,ly:7,drv:'车程 30min',dep:'建议 12:00到达',dur:'1-1.5h',bk:false,wrn:true,route:'从森林瀑布继续沿1号公路东行至Vík前转215号公路南行，全程约30min。',hl:['玄武岩柱洞穴','黑沙+白浪花','海蚀柱'],ph:['洞穴框架构图','长曝光覆盖黑沙','海蚀柱长焦'],rest:[{n:'Black Beach Restaurant',p:'4500 ISK',r:'海鲜汤'}],htl:[],notes:['⚠ 杀人浪极危险！已有游客遇难','⚠ 绝不背对大海！保持30m','下午光线最佳']},
+{id:21,x:505,y:555,day:'6',color:'#34a06c',name:'维克红教堂',en:'Víkurkirkja',sn:'红教堂',sl:true,lx:7,ly:7,drv:'车程 12min',dep:'建议 14:00到达',dur:'20min',bk:false,wrn:false,route:'从黑沙滩返回215号公路转1号公路东行至Vík镇约12min。教堂在镇子山坡上，沿小路开上去。',hl:['山坡上的红顶白墙教堂','俯瞰Vík小镇和黑沙滩','冰岛标志性画面'],ph:['教堂+远处黑沙滩海蚀柱','夕阳下剪影','从镇中仰拍山坡教堂'],rest:[{n:'Suður-Vík',p:'3500 ISK',r:'披萨羊肉'}],htl:[{n:'Hotel Kría (Vík)',p:'~35000 ISK'},{n:'Puffin Hostel',p:'~18000 ISK'}],notes:['免费','极光拍摄好地点','今晚住Vík']},
+{id:22,x:572,y:502,day:'7',color:'#0077b6',name:'Fjaðrárgljúfur峡谷',en:'Fjaðrárgljúfur',sn:'Fjaðrárgljúfur',sl:true,lx:7,ly:-4,drv:'车程 50min',dep:'建议 07:30出发',dur:'45min',bk:false,wrn:false,route:'从Vík沿1号公路东行约50min，左转进入小路即到停车场。今天路程长需早出发。',hl:['100m深蜿蜒苔藓峡谷','权游取景地'],ph:['步道尽头俯拍S形','中段侧拍深邃感'],rest:[],htl:[],notes:['免费','偶尔保护关闭查road.is','步道30-40min']},
+{id:23,x:675,y:451,day:'7',color:'#0077b6',name:'冰川徒步',en:'Skaftafell',sn:'Skaftafell',sl:true,lx:-38,ly:-5,drv:'车程 1h',dep:'建议 09:30到达',dur:'2.5-3h',bk:true,wrn:false,route:'从峡谷返回1号公路继续东行约1h到Skaftafell游客中心。跟团集合点在游客中心停车场。',hl:['踩千年冰川','蓝冰冰裂缝','10月可能进冰洞'],ph:['蓝冰偏振镜特写','冰川上回望山谷','冰裂缝自拍'],rest:[{n:'游客中心',p:'3000 ISK',r:'简餐'}],htl:[],notes:['⚠ 必须跟团不可自行上冰川','guidetoiceland.is预约','12000-15000 ISK/人','穿登山鞋+防水裤']},
+{id:24,x:743,y:449,day:'7',color:'#0077b6',name:'冰河湖',en:'Jökulsárlón',sn:'Jökulsárlón',sl:true,lx:7,ly:-5,drv:'车程 1h',dep:'建议 13:30到达',dur:'1-1.5h',bk:false,wrn:false,route:'从Skaftafell继续沿1号公路东行约1h。冰河湖就在公路旁，巨大的冰山一眼可见。',hl:['漂浮千年蓝色冰山','海豹出没','冰山入海口'],ph:['长焦冰山细节','广角冰山群+冰川','黄昏金光蓝冰'],rest:[],htl:[],notes:['免费','船游6000-9000 ISK，10月确认','下午光线最佳']},
+{id:25,x:743,y:456,day:'7',color:'#0077b6',name:'钻石沙滩',en:'Diamond Beach',sn:'',sl:false,drv:'步行 3min',dep:'建议 15:00到达',dur:'45min',bk:false,wrn:true,route:'就在冰河湖对面马路，步行过桥即到。日落前1h冰块最闪耀。之后开回Vík约2.5h住宿。',hl:['黑沙透明冰块如钻石','日落闪耀'],ph:['低角度逆光冰块剪影','冰块水晶特写','浪花冲刷瞬间'],rest:[],htl:[{n:'Hotel Höfn',p:'~30000 ISK'},{n:'Pakkhús必吃龙虾',p:'~5000 ISK'}],notes:['⚠ 远离海浪！','日落前1h最美','今晚住Vík，回程约2.5h']},
+{id:26,x:489,y:572,day:'8',color:'#8b5cf6',name:'迪霍拉里海岬',en:'Dyrhólaey',sn:'',sl:false,drv:'车程 20min',dep:'建议 09:00出发',dur:'30min',bk:false,wrn:false,route:'从Vík沿1号公路西行转218号公路南行，约20min到达灯塔停车场。',hl:['天然石拱门','灯塔俯瞰黑沙滩全景','海鹦栖息地'],ph:['灯塔旁俯拍全景','石拱门特写','黑沙滩鸟瞰'],rest:[],htl:[],notes:['风极大注意安全','上午光线好']},
+{id:27,x:468,y:552,day:'8',color:'#8b5cf6',name:'飞机残骸',en:'Sólheimasandur DC-3',sn:'DC-3',sl:true,lx:7,ly:-4,drv:'车程 15min',dep:'建议 10:00到达',dur:'1.5h',bk:false,wrn:false,route:'从Dyrhólaey返回1号公路西行约15min到停车场。从停车场步行单程3.5km约45min到飞机残骸，或搭付费接驳车(2500 ISK)10min到达。',hl:['美军DC-3飞机残骸','黑沙滩上的末世感','冰岛最出片地之一'],ph:['广角拍残骸全貌','机舱内框架构图','黑白风格'],rest:[],htl:[],notes:['停车场步行单程3.5km（约45min）','或付费接驳车往返2500 ISK','带足水和防风衣','停车费750 ISK']},
+{id:28,x:320,y:462,day:'8',color:'#8b5cf6',name:'温泉河徒步',en:'Reykjadalur',sn:'Reykjadalur',sl:true,lx:7,ly:-4,drv:'车程 1.5h',dep:'建议 13:00到达',dur:'2h',bk:false,wrn:false,route:'从飞机残骸停车场沿1号公路西行约1.5h到Hveragerði镇。导航至Reykjadalur停车场，步行往返约3km（1h）到温泉河。之后回雷市仅30min。',hl:['天然温泉河泡汤','沿途地热蒸汽景观','徒步+温泉完美结合'],ph:['温泉河中泡澡','沿途蒸汽喷涌','山谷全景'],rest:[{n:'Hver Restaurant (Hveragerði)',p:'4000 ISK',r:'地热烤面包'}],htl:[],notes:['往返徒步约3km（1h）','带泳衣和毛巾','河水温度适宜','之后30min回雷市，晚上逛市区']},
+{id:29,x:359,y:189,day:'x',color:'#9ca3af',name:'犀牛石',en:'Hvítserkur',sn:'',sl:false,drv:'阿克雷里→2.5h',dur:'45min',bk:false,wrn:false,route:'从阿克雷里沿1号公路西行约2.5h到Vatnsnes半岛。方向与米湖相反，需额外安排时间。',hl:['15m玄武岩似犀牛饮水','退潮更壮观'],ph:['悬崖俯拍','退潮沙滩近景','日落剪影'],rest:[],htl:[],notes:['偏远，需绕路','陡峭楼梯10月可能滑','查潮汐表']},
+{id:30,x:178,y:279,day:'x',color:'#9ca3af',name:'斯蒂基斯霍尔米',en:'Stykkishólmur',sn:'',sl:false,drv:'雷市→2h',dur:'1h',bk:false,wrn:false,route:'从雷市沿1号公路北行转54号公路约2h。可结合斯奈山一日游，在去Kirkjufell的途中经过。',hl:['彩色渔港','Súgandisey灯塔','白日梦想家取景地'],ph:['港口彩色房屋','灯塔+海景'],rest:[{n:'Narfeyrarstofa',p:'5000 ISK',r:'本地贝类'}],htl:[],notes:['可结合斯奈山一日游']},
+{id:31,x:820,y:432,day:'x',color:'#9ca3af',name:'蝙蝠山',en:'Vestrahorn/Stokksnes',sn:'',sl:false,drv:'Höfn→15min',dur:'1h',bk:false,wrn:false,route:'从Höfn沿1号公路东行约15min，转入Stokksnes收费道路。若住Höfn可清晨日出前去。',hl:['454m尖峰山+黑沙滩倒影','冰岛最佳摄影地之一','维京村电影布景'],ph:['黑沙滩水面倒影','长焦拍山峰纹理','日出金光'],rest:[],htl:[],notes:['门票900 ISK','日出最佳','若住Höfn可清晨去']},
+{id:32,x:680,y:458,day:'x',color:'#9ca3af',name:'黑瀑布',en:'Svartifoss',sn:'',sl:false,drv:'Skaftafell游客中心出发',dur:'1.5h',bk:false,wrn:false,route:'在Skaftafell园区内，从游客中心步行往返约3.4km。可与冰川徒步安排在同一天。',hl:['六角玄武岩柱环绕的瀑布','哈尔格林姆斯教堂的灵感来源'],ph:['正面拍玄武岩柱+瀑布','秋季黄叶前景'],rest:[],htl:[],notes:['步行往返3.4km','在Skaftafell园区内','可与冰川徒步同天']},
+{id:33,x:435,y:535,day:'x',color:'#9ca3af',name:'隐藏温泉泳池',en:'Seljavallalaug',sn:'',sl:false,drv:'Seljalandsfoss→15min',dur:'1h',bk:false,wrn:false,route:'从塞里雅兰瀑布沿1号公路东行约15min转入小路。停车后步行约15min到山间泳池。',hl:['1923年建造的山间泳池','被苔藓山谷环绕','免费野温泉'],ph:['泳池+山谷全景','蒸汽弥漫氛围感'],rest:[],htl:[],notes:['步行15min到达','免费但无人维护','带泳衣毛巾','水温不高，建议晴天去']},
+{id:34,x:650,y:130,day:'x',color:'#9ca3af',name:'胡萨维克观鲸',en:'Húsavík',sn:'',sl:false,drv:'米湖→50min',dur:'3h',bk:true,wrn:false,route:'从米湖沿1号公路西行后转87号公路北行约50min。观鲸船从Húsavík港口出发，航程约3h。',hl:['欧洲观鲸之都','座头鲸出没率98%','电影《欧洲歌唱大赛》取景地'],ph:['鲸鱼跃出水面','港口彩色房屋','鲸鱼博物馆'],rest:[{n:'Gamli Baukur',p:'4500 ISK',r:'鱼汤海鲜'}],htl:[],notes:['观鲸船约10000 ISK/人','需提前预约','10月仍有机会看到']},
+{id:35,x:210,y:478,day:'x',color:'#9ca3af',name:'法格拉达尔火山',en:'Fagradalsfjall',sn:'',sl:false,drv:'KEF→20min',dur:'3-4h',bk:false,wrn:false,route:'从KEF机场沿43号公路南行约20min到停车场。往返徒步约7km到火山口。',hl:['2021-2023年喷发的新火山','熔岩地貌徒步','可能仍有地热活动'],ph:['熔岩纹理特写','火山口全景','蒸汽升腾'],rest:[],htl:[],notes:['往返徒步约7km','查SafeTravel.is确认是否开放','穿登山鞋','天气多变带防风衣']},
+{id:36,x:820,y:250,day:'x',color:'#9ca3af',name:'玄武岩峡谷',en:'Stuðlagil Canyon',sn:'',sl:false,drv:'Egilsstaðir→1h',dur:'2h',bk:false,wrn:false,route:'从Egilsstaðir沿1号公路西南行约1h转入砂石路。推荐走东岸步道，较短约30min到观景点。',hl:['壮观的玄武岩柱峡谷','碧蓝河水+几何岩柱','Instagram爆红景点'],ph:['俯拍峡谷+蓝水','柱状岩壁特写','人物比例对比'],rest:[],htl:[],notes:['需走砂石路','东岸步道较短（30min）','西岸更近但角度不同','秋季水位低颜色更蓝']},
+{id:37,x:350,y:442,day:'x',color:'#9ca3af',name:'秘密温泉',en:'Secret Lagoon',sn:'',sl:false,drv:'Geysir→15min',dur:'1h',bk:true,wrn:false,route:'从Geysir沿35号公路南行约15min到Flúðir小镇。温泉在镇边，可结合黄金圈当天去。',hl:['冰岛最古老天然温泉泳池','比蓝湖便宜人少','周围间歇泉喷发'],ph:['温泉中拍蒸汽','夕阳暖光','周围苔藓地热'],rest:[],htl:[],notes:['门票3000 ISK','可结合黄金圈','比蓝湖更有野趣']},
+{id:38,x:930,y:247,day:'x',color:'#9ca3af',name:'蓝色教堂小镇',en:'Seyðisfjörður',sn:'',sl:false,drv:'Egilsstaðir→30min',dur:'45min',bk:false,wrn:false,route:'从Egilsstaðir翻越Fjarðarheiði山口约30min。10月山路可能有雪，需注意路况。小镇在峡湾尽头。',hl:['蓝色教堂+彩虹路','彩色木屋+峡湾倒影','冰岛最美小镇之一'],ph:['彩虹路+教堂经典','峡湾倒影','山顶俯瞰全景'],rest:[{n:'Nordic Restaurant',p:'4000 ISK',r:'当地鱼类'}],htl:[],notes:['翻山10月可能有雪','东部峡湾较远','需额外安排时间']},
 ]);
 
 const activeDay=ref(null);
@@ -249,8 +265,10 @@ function startAnim(){if(!rafId)rafId=requestAnimationFrame(tick);}
 
 const visibleSpots=computed(()=>{
  if(!activeDay.value) return spots.value;
- return spots.value.filter(s=>activeDay.value==='1-2'?(s.day==='1'||s.day==='2'):s.day===activeDay.value);
+ if(activeDay.value==='1-2') return spots.value.filter(s=>s.day==='1'||s.day==='2');
+ return spots.value.filter(s=>s.day===activeDay.value);
 });
+const spotScale=computed(()=>vw.value/1000*2);
 
 function zm(f){
  const nw=Math.min(1000,Math.max(200,tw/f));
@@ -340,7 +358,7 @@ onUnmounted(()=>{
  if(rafId) cancelAnimationFrame(rafId);
 });
 
-return{landPath,roadPath,days,cities,spots,activeDay,visibleSpots,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave};
+return{landPath,roadPath,days,cities,spots,activeDay,visibleSpots,spotScale,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave};
 }}).mount('#app');
 </script>
 </body>
