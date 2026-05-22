@@ -2,12 +2,12 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>冰岛环岛自驾攻略</title>
 <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;color:#1d1d1f;-webkit-font-smoothing:antialiased}
+html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;color:#1d1d1f;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
 #app{height:100%;display:flex;flex-direction:column}
 
 .header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(255,255,255,0.82);backdrop-filter:blur(20px) saturate(1.8);border-bottom:1px solid rgba(0,0,0,0.06);flex-shrink:0;z-index:50}
@@ -19,7 +19,7 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .leg.on{background:#fff;border-color:rgba(0,0,0,0.08);color:#1d1d1f;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 .leg-dot{width:8px;height:8px;border-radius:50%}
 
-.map-wrap{flex:1;position:relative;overflow:hidden;background:#f5f5f7}
+.map-wrap{flex:1;position:relative;overflow:hidden;background:#f5f5f7;touch-action:none;-webkit-user-select:none;user-select:none}
 .map-wrap svg{position:absolute;inset:0;width:100%;height:100%}
 
 .land{fill:#e8e8ed;stroke:#d2d2d7;stroke-width:0.6;stroke-linejoin:round}
@@ -112,12 +112,56 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .tip-insider{margin-bottom:12px}
 .tip-insider li{font-size:0.72rem;line-height:1.5;color:#0369a1;padding-left:12px;position:relative;margin-bottom:2px}
 .tip-insider li::before{content:'\2605';position:absolute;left:0;font-size:0.55rem;color:#f59e0b}
+
+.tip-handle{display:none}
+.tip-close{display:none}
+.desktop-only{display:inline}
+.mobile-only{display:none}
+
+@media(max-width:768px){
+.desktop-only{display:none}
+.mobile-only{display:inline}
+.header{padding:10px 16px;flex-direction:column;align-items:flex-start;gap:6px}
+.header h1{font-size:1rem}
+.header .sub{font-size:0.75rem}
+.legend{width:100%;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+.legend::-webkit-scrollbar{display:none}
+.leg{font-size:0.72rem;padding:5px 10px;flex-shrink:0}
+.tip{width:100%!important;max-width:100%!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;max-height:65vh;border-radius:16px 16px 0 0;transform:translateY(100%);transition:transform 0.3s cubic-bezier(.4,0,.2,1),opacity 0.2s,visibility 0.2s;padding:8px 16px 24px;box-shadow:0 -10px 40px rgba(0,0,0,0.15)}
+.tip.show{transform:translateY(0)}
+.tip-handle{display:block;width:36px;height:4px;background:rgba(0,0,0,0.15);border-radius:2px;margin:0 auto 10px;flex-shrink:0}
+.tip-close{display:flex;position:absolute;top:10px;right:12px;width:32px;height:32px;border:none;background:rgba(0,0,0,0.06);color:#86868b;font-size:1.1rem;border-radius:50%;cursor:pointer;align-items:center;justify-content:center;z-index:10}
+.tip-meta{font-size:0.75rem}
+.sec-t{font-size:0.72rem}
+.sec li{font-size:0.82rem}
+.tip-history{font-size:0.8rem}
+.tip-insider li{font-size:0.8rem}
+.route-txt{font-size:0.8rem}
+.tag{font-size:0.72rem;padding:4px 10px}
+.row{font-size:0.8rem}
+.row-p{font-size:0.75rem}
+.rec{font-size:0.75rem}
+.carousel-track img{height:180px}
+.carousel-arr{width:36px;height:36px;font-size:1.1rem;opacity:0.85!important}
+.carousel-dots span{width:7px;height:7px}
+.carousel-cnt{font-size:0.7rem}
+.controls{bottom:16px;left:16px;right:auto}
+.ctrl-btn{width:44px;height:44px;font-size:1.2rem;border-radius:12px}
+.zoom-pct{font-size:0.7rem}
+.ctrl-chk{font-size:0.75rem;gap:5px}
+.ctrl-chk input{width:16px;height:16px}
+.lb-arr{width:44px;height:44px;font-size:1.3rem}
+.lb-close{width:44px;height:44px;font-size:1.5rem}
+.lb-cnt{font-size:0.85rem}
+.lb-arr.l{left:8px}
+.lb-arr.r{right:8px}
+}
 </style>
 </head>
 <body>
 <div id="app">
 <div class="header">
- <div><h1>冰岛环岛自驾攻略</h1><div class="sub">9.28–10.6 · 4人 · 逆时针环岛 · 滚轮缩放 · 拖拽平移</div></div>
+ <div><h1>冰岛环岛自驾攻略</h1><div class="sub">9.28–10.6 · 4人 · 逆时针环岛 · <span class="desktop-only">滚轮缩放 · 拖拽平移</span><span class="mobile-only">双指缩放 · 点击景点</span></div></div>
  <div class="legend">
   <div v-for="d in days" :key="d.id" class="leg" :class="{on:activeDay===d.id}" :style="{'--c':d.color}" @click="activeDay=activeDay===d.id?null:d.id">
    <div class="leg-dot" :style="{background:d.color}"></div>{{d.label}}
@@ -162,12 +206,14 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 <!-- Tooltip -->
 <div class="tip" :class="{show:!!tip}" :style="tpos" @pointerenter="tHov=true" @pointerleave="tLeave">
 <template v-if="tip">
+ <div class="tip-handle"></div>
+ <button class="tip-close" @click="closeTip">&times;</button>
  <div class="tip-head">
   <div class="tip-n" :style="{background:tip.color}">{{tip.id}}</div>
   <div><div class="tip-name">{{tip.name}}</div><div class="tip-sub">{{tip.en}} · Day {{tip.day}}</div></div>
  </div>
  <!-- Photos Carousel -->
- <div v-if="tip.imgs?.length" class="carousel" @pointerdown.stop @pointermove.stop>
+ <div v-if="tip.imgs?.length" class="carousel" @pointerdown.stop @pointermove.stop @touchstart="carTs" @touchend="carTe">
   <div class="carousel-track" :style="{transform:'translateX(-'+carIdx*100+'%)'}">
    <img v-for="(img,i) in tip.imgs" :key="i" :src="img" :alt="tip.name+' '+(i+1)" loading="lazy" @click="openLb(tip.imgs,i)"/>
   </div>
@@ -203,7 +249,7 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 </template>
 </div>
 <!-- Lightbox -->
-<div class="lightbox" :class="{open:lbOpen}" @click.self="lbOpen=false">
+<div class="lightbox" :class="{open:lbOpen}" @click.self="lbOpen=false" @touchstart="lbTs" @touchend="lbTe">
  <button class="lb-close" @click="lbOpen=false">&times;</button>
  <button class="lb-arr l" @click="lbPrev">&lsaquo;</button>
  <img v-if="lbOpen" :src="lbImgs[lbIdx]" :alt="'Photo '+(lbIdx+1)"/>
@@ -757,6 +803,10 @@ let dragging=false,dx=0,dy=0,sx=0,sy=0;
 let lastMoveX=0,lastMoveY=0,lastMoveT=0;
 let inertiaVx=0,inertiaVy=0;
 let rafId=null;
+const isMobile='ontouchstart' in window||navigator.maxTouchPoints>0;
+const pointers=[];
+let lastPinchDist=0;
+let carSwipeX=0,lbSwipeX=0;
 
 function tick(){
  if(!dragging&&(Math.abs(inertiaVx)>0.05||Math.abs(inertiaVy)>0.05)){
@@ -849,14 +899,48 @@ function onWheel(e){
 }
 
 function onDown(e){
- if(e.target.closest('.spot'))return;
  if(e.target.closest('.controls'))return;
+ // Mobile: close tooltip when tapping non-spot area
+ if(isMobile&&tip.value&&!e.target.closest('.spot')&&!e.target.closest('.tip')){
+  hId.value=null;tip.value=null;
+ }
+ if(e.target.closest('.spot'))return;
+ // Track pointer for pinch
+ pointers.push({id:e.pointerId,x:e.clientX,y:e.clientY});
+ if(pointers.length>=2){
+  lastPinchDist=Math.hypot(pointers[0].x-pointers[1].x,pointers[0].y-pointers[1].y);
+  dragging=false;
+  return;
+ }
  dragging=true;dx=e.clientX;dy=e.clientY;sx=tx;sy=ty;
  inertiaVx=0;inertiaVy=0;
  lastMoveX=e.clientX;lastMoveY=e.clientY;lastMoveT=performance.now();
  wrap.value.setPointerCapture(e.pointerId);
 }
 function onMove(e){
+ // Update pointer in cache
+ const pi=pointers.findIndex(p=>p.id===e.pointerId);
+ if(pi>=0){pointers[pi].x=e.clientX;pointers[pi].y=e.clientY;}
+ // Pinch zoom
+ if(pointers.length>=2){
+  const dist=Math.hypot(pointers[0].x-pointers[1].x,pointers[0].y-pointers[1].y);
+  if(lastPinchDist>0){
+   const f=lastPinchDist/dist;
+   const rect=wrap.value.getBoundingClientRect();
+   const mx=(pointers[0].x+pointers[1].x)/2;
+   const my=(pointers[0].y+pointers[1].y)/2;
+   const px=(mx-rect.left)/rect.width;
+   const py=(my-rect.top)/rect.height;
+   const nw=Math.min(1000,Math.max(200,tw*f));
+   const nh=Math.min(600,Math.max(120,th*f));
+   tx+=(tw-nw)*px;
+   ty+=(th-nh)*py;
+   tw=nw;th=nh;
+   startAnim();
+  }
+  lastPinchDist=dist;
+  return;
+ }
  if(!dragging)return;
  const rect=wrap.value.getBoundingClientRect();
  const sc=cw/rect.width;
@@ -872,7 +956,10 @@ function onMove(e){
  startAnim();
 }
 function onUp(e){
- if(dragging&&wrap.value)wrap.value.releasePointerCapture(e.pointerId);
+ const pi=pointers.findIndex(p=>p.id===e.pointerId);
+ if(pi>=0)pointers.splice(pi,1);
+ if(pointers.length<2)lastPinchDist=0;
+ if(dragging&&wrap.value){try{wrap.value.releasePointerCapture(e.pointerId);}catch(ex){}}
  dragging=false;
  startAnim();
 }
@@ -884,11 +971,31 @@ function carNext(){if(tip.value&&tip.value.imgs)carIdx.value=(carIdx.value+1)%ti
 function openLb(imgs,i){lbImgs.value=imgs;lbIdx.value=i;lbOpen.value=true;}
 function lbPrev(){lbIdx.value=(lbIdx.value-1+lbImgs.value.length)%lbImgs.value.length;}
 function lbNext(){lbIdx.value=(lbIdx.value+1)%lbImgs.value.length;}
+function closeTip(){hId.value=null;tip.value=null;}
+// Carousel swipe
+function carTs(e){carSwipeX=e.touches[0].clientX;}
+function carTe(e){
+ const delta=e.changedTouches[0].clientX-carSwipeX;
+ if(Math.abs(delta)>40){if(delta<0)carNext();else carPrev();}
+}
+// Lightbox swipe
+function lbTs(e){lbSwipeX=e.touches[0].clientX;}
+function lbTe(e){
+ const delta=e.changedTouches[0].clientX-lbSwipeX;
+ if(Math.abs(delta)>40){if(delta<0)lbNext();else lbPrev();}
+}
 
 // Tooltip
 function enter(s,e){
  clearTimeout(lTimer);
  clearTimeout(hTimer);
+ if(isMobile){
+  // Toggle on mobile
+  if(tip.value&&tip.value.id===s.id){hId.value=null;tip.value=null;return;}
+  hId.value=s.id;tip.value=s;carIdx.value=0;
+  tpos.value={};
+  return;
+ }
  const delay=tip.value?20:60;
  hTimer=setTimeout(()=>{
   hId.value=s.id;tip.value=s;carIdx.value=0;
@@ -901,10 +1008,12 @@ function enter(s,e){
  },delay);
 }
 function leave(){
+ if(isMobile)return;
  clearTimeout(hTimer);
  lTimer=setTimeout(()=>{if(!tHov.value){hId.value=null;tip.value=null}},100);
 }
 function tLeave(){
+ if(isMobile)return;
  tHov.value=false;
  lTimer=setTimeout(()=>{hId.value=null;tip.value=null},80);
 }
@@ -927,7 +1036,7 @@ onUnmounted(()=>{
  if(rafId) cancelAnimationFrame(rafId);
 });
 
-return{landPath,days,cities,spots,activeDay,showInter,visibleSpots,spotScale,dayRoutes,interDayRoutes,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,carIdx,lbOpen,lbImgs,lbIdx,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave,carPrev,carNext,openLb,lbPrev,lbNext};
+return{landPath,days,cities,spots,activeDay,showInter,visibleSpots,spotScale,dayRoutes,interDayRoutes,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,carIdx,lbOpen,lbImgs,lbIdx,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave,carPrev,carNext,openLb,lbPrev,lbNext,closeTip,carTs,carTe,lbTs,lbTe};
 }}).mount('#app');
 </script>
 </body>
