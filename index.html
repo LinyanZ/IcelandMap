@@ -826,7 +826,7 @@ const visibleSpots=computed(()=>{
  if(!activeDay.value) return spots.value;
  return spots.value.filter(s=>s.day===activeDay.value);
 });
-const spotScale=computed(()=>vw.value/1000*2);
+const spotScale=computed(()=>vw.value/1000*(isMobile?4:2));
 const dayRoutes=computed(()=>{
  const dayMap={};
  spots.value.forEach(s=>{
