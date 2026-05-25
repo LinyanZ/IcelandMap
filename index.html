@@ -984,8 +984,8 @@ function enter(s,e){
   const vw2=window.innerWidth,vh2=window.innerHeight;
   let l=e.clientX+14,t=e.clientY-16;
   if(l+380>vw2)l=e.clientX-380;
-  if(t+400>vh2)t=vh2-420;
   if(t<50)t=50;
+  if(t+520>vh2)t=Math.max(50,vh2-520-10);
   tpos.value={left:l+'px',top:t+'px'};
  },delay);
 }
