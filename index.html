@@ -184,6 +184,11 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .dt-input:focus{border-color:#6366f1}
 .dt-input::placeholder{color:#ccc}
 .htl-form{display:flex;flex-direction:column;gap:10px}
+.htl-book{margin-top:14px;padding-top:14px;border-top:1px solid #eee}
+.htl-book-label{font-size:0.78rem;color:#666;margin-bottom:8px}
+.htl-book-btns{display:flex;flex-wrap:wrap;gap:6px}
+.htl-book-btn{padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:0.75rem;font-weight:500;cursor:pointer;transition:all .2s;color:#1d1d1f}
+.htl-book-btn:hover{background:#f0f0f5;border-color:#aaa}
 .htl-row{display:flex;align-items:center;gap:10px}
 .htl-row label{width:40px;font-size:0.8rem;color:#666;flex-shrink:0}
 .htl-row .meta-input{flex:1}
@@ -263,6 +268,7 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
  <button class="ctrl-btn ctrl-txt" @click="exportData()" v-if="dataLoaded">导出</button>
  <button class="ctrl-btn ctrl-txt" @click="exportPdf()" v-if="dataLoaded">行程单</button>
  <button class="ctrl-btn ctrl-txt" @click="openPlanEditor()" v-if="dataLoaded">编辑</button>
+ <label class="ctrl-chk" style="margin-top:6px"><input type="checkbox" v-model="useBaidu"/><span>百度地图</span></label>
 </div>
 <div class="controls">
  <button class="ctrl-btn" @click="zm(1.4)">+</button>
@@ -411,6 +417,16 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
     <div class="htl-row"><label>电话</label><input class="meta-input" v-model="planDayHtl.tel" placeholder="联系电话"/></div>
     <div class="htl-row"><label>链接</label><input class="meta-input" v-model="planDayHtl.url" placeholder="预订链接"/></div>
    </div>
+   <div class="htl-book">
+    <div class="htl-book-label">订酒店 · {{planDayRegion}}</div>
+    <div class="htl-book-btns">
+     <button class="htl-book-btn" @click="openHotelSite('trip')">携程</button>
+     <button class="htl-book-btn" @click="openHotelSite('booking')">Booking</button>
+     <button class="htl-book-btn" @click="openHotelSite('agoda')">Agoda</button>
+     <button class="htl-book-btn" @click="openHotelSite('hotels')">Hotels.com</button>
+     <button class="htl-book-btn" @click="openHotelSite('airbnb')">Airbnb</button>
+    </div>
+   </div>
   </div>
  </div>
 </div>
@@ -439,6 +455,7 @@ const dataLoaded=ref(false);
 const metaEditing=ref(false);
 const planEditing=ref(false);
 const planDay=ref(null);
+const useBaidu=ref(false);
 
 const dateRangeDisplay=computed(()=>{
  if(!tripMeta.startDate||!days.value.length)return'';
@@ -875,16 +892,41 @@ const planDayHtl=computed(()=>{
  const d=days.value.find(d=>d.id===planDay.value);
  return d?d.htl:{name:'',addr:'',tel:'',url:''};
 });
+const planDayRegion=computed(()=>{
+ const dSpots=spots.value.filter(s=>s.day===planDay.value);
+ if(dSpots.length)return dSpots[dSpots.length-1].en||dSpots[dSpots.length-1].name;
+ const d=days.value.find(d=>d.id===planDay.value);
+ return d?d.name||'Iceland':'Iceland';
+});
 const otherSpots=computed(()=>{
  if(!planDay.value)return[];
  return spots.value.filter(s=>s.day!==planDay.value);
 });
+function openHotelSite(site){
+ const q=planDayRegion.value+', Iceland';
+ const enc=encodeURIComponent(q);
+ const parts=tripMeta.startDate.split('-');
+ const s0=new Date(Number(parts[0]),Number(parts[1])-1,Number(parts[2]));
+ s0.setDate(s0.getDate()+Number(planDay.value)-1);
+ const checkin=s0.getFullYear()+'-'+String(s0.getMonth()+1).padStart(2,'0')+'-'+String(s0.getDate()).padStart(2,'0');
+ const co=new Date(s0);co.setDate(co.getDate()+1);
+ const checkout=co.getFullYear()+'-'+String(co.getMonth()+1).padStart(2,'0')+'-'+String(co.getDate()).padStart(2,'0');
+ let url;
+ switch(site){
+  case'booking':url='https://www.booking.com/searchresults.zh-cn.html?ss='+enc+'&ssne='+enc+'&ssne_untouched='+enc+'&lang=zh-cn&sb=1&src=index&checkin='+checkin+'&checkout='+checkout+'&group_adults=1&no_rooms=1&group_children=0';break;
+  case'agoda':url='https://www.agoda.com/search?city='+enc+'&checkIn='+checkin+'&los=1&checkOut='+checkout;break;
+  case'hotels':url='https://www.hotels.com/Hotel-Search?destination='+enc+'&d1='+checkin+'&d2='+checkout;break;
+  case'airbnb':url='https://www.airbnb.com/s/'+enc+'/homes?checkin='+checkin+'&checkout='+checkout;break;
+  case'trip':url='https://www.trip.com/hotels/list?city='+enc+'&checkin='+checkin.replace(/-/g,'/')+'&checkout='+checkout.replace(/-/g,'/');break;
+ }
+ window.open(url,'_blank');
+}
 function addSpotToDay(spotId){
  const s=spots.value.find(x=>x.id===Number(spotId));if(!s)return;
  const di=days.value.find(d=>d.id===planDay.value);if(!di)return;
  const arr=spots.value,idx=arr.indexOf(s);
  if(idx>-1)arr.splice(idx,1);
- s.day=planDay.value;s.color=di.color;
+ s.day=planDay.value;s.color=di.color;s.dt='';
  let insertAt=arr.length;
  for(let i=0;i<arr.length;i++){if(arr[i].day===planDay.value)insertAt=i+1;}
  arr.splice(insertAt,0,s);
@@ -895,7 +937,7 @@ function removeSpotFromDay(spot){
  if(!firstOther)return;
  const arr=spots.value,idx=arr.indexOf(spot);
  if(idx>-1)arr.splice(idx,1);
- spot.day=firstOther.id;spot.color=firstOther.color;
+ spot.day=firstOther.id;spot.color=firstOther.color;spot.dt='';
  let insertAt=arr.length;
  for(let i=0;i<arr.length;i++){if(arr[i].day===firstOther.id)insertAt=i+1;}
  arr.splice(insertAt,0,spot);
@@ -906,6 +948,7 @@ function planReorder(from,to){
  const day=planDay.value;
  const inDay=spots.value.filter(s=>s.day===day);
  const [moved]=inDay.splice(from,1);
+ moved.dt='';
  inDay.splice(to,0,moved);
  const result=[];let di=0;
  for(const s of spots.value){
@@ -946,8 +989,15 @@ function openDriveQuery(spot){
   if(origin&&!origin.includes(','))origin+=', Iceland';
   dest=(spot.en||spot.name)+', Iceland';
  }
- let url='https://www.google.com/maps/dir/?api=1&travelmode=driving&destination='+encodeURIComponent(dest);
- if(origin)url+='&origin='+encodeURIComponent(origin);
+ let url;
+ if(useBaidu.value){
+  url='https://api.map.baidu.com/direction?mode=driving&output=html&region=冰岛';
+  url+='&origin='+encodeURIComponent(origin);
+  url+='&destination='+encodeURIComponent(dest);
+ }else{
+  url='https://www.google.com/maps/dir/?api=1&travelmode=driving&destination='+encodeURIComponent(dest);
+  if(origin)url+='&origin='+encodeURIComponent(origin);
+ }
  window.open(url,'_blank');
 }
 onMounted(()=>{
@@ -963,7 +1013,7 @@ onUnmounted(()=>{
  if(rafId) cancelAnimationFrame(rafId);
 });
 
-return{landPath,days,cities,spots,activeDay,showInter,visibleSpots,spotScale,dayRoutes,interDayRoutes,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,carIdx,lbOpen,lbImgs,lbIdx,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave,carPrev,carNext,openLb,lbPrev,lbNext,closeTip,carTs,carTe,lbTs,lbTe,dragIdx,overIdx,importData,exportData,exportPdf,dataLoaded,tripMeta,metaEditing,dateRangeDisplay,dayLabel,daySummary,planEditing,planDay,planDaySpots,planDayHtl,otherSpots,openPlanEditor,closePlanEditor,addSpotToDay,removeSpotFromDay,planDragStart,planDragOver,planDrop,planDragEnd,openDriveQuery};
+return{landPath,days,cities,spots,activeDay,showInter,visibleSpots,spotScale,dayRoutes,interDayRoutes,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,carIdx,lbOpen,lbImgs,lbIdx,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave,carPrev,carNext,openLb,lbPrev,lbNext,closeTip,carTs,carTe,lbTs,lbTe,dragIdx,overIdx,importData,exportData,exportPdf,dataLoaded,tripMeta,metaEditing,dateRangeDisplay,dayLabel,daySummary,planEditing,planDay,planDaySpots,planDayHtl,planDayRegion,otherSpots,openPlanEditor,closePlanEditor,addSpotToDay,removeSpotFromDay,planDragStart,planDragOver,planDrop,planDragEnd,openDriveQuery,openHotelSite,useBaidu};
 }}).mount('#app');
 </script>
 </body>
