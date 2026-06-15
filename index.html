@@ -38,8 +38,10 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .spot .lbl{font-size:5px;font-weight:600;opacity:0.7;pointer-events:none;fill:#1d1d1f}
 
 .controls{position:absolute;bottom:20px;right:20px;display:flex;flex-direction:column;align-items:flex-end;gap:4px;z-index:30}
+.controls-left{position:absolute;bottom:20px;left:20px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;z-index:30}
 .ctrl-btn{width:34px;height:34px;border:1px solid rgba(0,0,0,0.08);background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);color:#1d1d1f;font-size:1.1rem;cursor:pointer;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
 .ctrl-btn:hover{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.ctrl-txt{width:52px;font-size:0.6rem;padding:0}
 .zoom-pct{text-align:center;font-size:0.6rem;color:#86868b;margin-top:3px;font-weight:500}
 .ctrl-chk{display:flex;align-items:center;gap:4px;margin-top:6px;font-size:0.65rem;color:#86868b;cursor:pointer;user-select:none}
 .ctrl-chk input{width:13px;height:13px;accent-color:#6366f1;cursor:pointer}
@@ -67,6 +69,8 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .t-bk{background:#f5ecfb;color:#7b3fa0;border:1px solid #e4cdf2}
 .t-wrn{background:#fef0ee;color:#c53030;border:1px solid #fcd5d0}
 .t-fee{background:#f0f9ff;color:#0369a1;border:1px solid #bae6fd}
+.t-nav{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;cursor:pointer;transition:background .2s}
+.t-nav:hover{background:#dcfce7}
 .route-txt{font-size:0.72rem;color:#555;line-height:1.5;padding:2px 0}
 
 .carousel{position:relative;margin-bottom:12px;border-radius:10px;overflow:hidden}
@@ -146,6 +150,7 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .carousel-dots span{width:7px;height:7px}
 .carousel-cnt{font-size:0.7rem}
 .controls{bottom:16px;right:16px}
+.controls-left{bottom:16px;left:16px}
 .ctrl-btn{width:44px;height:44px;font-size:1.2rem;border-radius:12px}
 .zoom-pct{font-size:0.7rem}
 .ctrl-chk{font-size:0.75rem;gap:5px}
@@ -156,8 +161,39 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .lb-arr.l{left:8px}
 .lb-arr.r{right:8px}
 }
-.tip-edit{width:28px;height:28px;border:none;border-radius:50%;background:rgba(0,0,0,0.06);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
-.tip-edit:hover{background:rgba(0,0,0,0.12)}
+.plan-editor{position:fixed;top:0;right:0;bottom:0;width:45%;max-width:480px;min-width:320px;z-index:9999;background:#fff;display:flex;flex-direction:column;overflow:hidden;box-shadow:-4px 0 20px rgba(0,0,0,0.12);border-left:1px solid #eee}
+@media(max-width:768px){
+.plan-editor{width:100%;max-width:100%;min-width:0;left:0;border-left:none;box-shadow:none}
+}
+.plan-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid #eee;flex-shrink:0}
+.plan-header h2{margin:0;font-size:1.1rem;font-weight:700}
+.plan-tabs{display:flex;gap:4px;padding:12px 24px;overflow-x:auto;overflow-y:hidden;flex-shrink:0;flex-wrap:nowrap;border-bottom:1px solid #eee;background:#fafafa;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.plan-tabs::-webkit-scrollbar{height:4px}
+.plan-tabs::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:4px}
+.plan-tab{padding:6px 14px;border-radius:20px;font-size:0.78rem;font-weight:500;border:1px solid #ddd;background:#fff;cursor:pointer;white-space:nowrap;transition:all .2s;color:#555;flex-shrink:0}
+.plan-tab.active{color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.plan-body{flex:1;overflow-y:auto;padding:20px 24px}
+.plan-section{margin-bottom:24px}
+.plan-section-title{font-size:0.8rem;font-weight:700;color:#1d1d1f;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px}
+.plan-add{margin-top:10px}
+.order-rm{width:22px;height:22px;border:none;border-radius:50%;background:rgba(200,0,0,0.08);color:#c53030;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.order-rm:hover{background:rgba(200,0,0,0.15)}
+.order-nav{width:22px;height:22px;border:none;border-radius:50%;background:rgba(0,100,0,0.08);color:#166534;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.order-nav:hover{background:rgba(0,100,0,0.15)}
+.dt-input{width:60px;padding:3px 6px;border:1px solid #e0e0e0;border-radius:6px;font-size:0.75rem;outline:none;flex-shrink:0;text-align:center}
+.dt-input:focus{border-color:#6366f1}
+.dt-input::placeholder{color:#ccc}
+.htl-form{display:flex;flex-direction:column;gap:10px}
+.htl-row{display:flex;align-items:center;gap:10px}
+.htl-row label{width:40px;font-size:0.8rem;color:#666;flex-shrink:0}
+.htl-row .meta-input{flex:1}
+@media(max-width:768px){
+.plan-header{padding:12px 16px}
+.plan-tabs{padding:10px 16px}
+.plan-body{padding:16px}
+.htl-row{flex-direction:column;align-items:flex-start;gap:4px}
+.htl-row label{width:auto}
+}
 .editor-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
 .editor{background:#fff;border-radius:16px;width:360px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);padding:20px}
 .editor-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
@@ -222,10 +258,13 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
   <text class="lbl" :x="s.lx||7" :y="s.ly||-3" :fill="s.color">{{s.name}}</text>
  </g>
 </svg>
+<div class="controls-left">
+ <button class="ctrl-btn ctrl-txt" @click="importData()">导入</button>
+ <button class="ctrl-btn ctrl-txt" @click="exportData()" v-if="dataLoaded">导出</button>
+ <button class="ctrl-btn ctrl-txt" @click="exportPdf()" v-if="dataLoaded">行程单</button>
+ <button class="ctrl-btn ctrl-txt" @click="openPlanEditor()" v-if="dataLoaded">编辑</button>
+</div>
 <div class="controls">
- <button class="ctrl-btn" @click="importData()" style="font-size:0.6rem;width:auto;padding:0 6px">导入</button>
- <button class="ctrl-btn" @click="exportData()" style="font-size:0.6rem;width:auto;padding:0 6px" v-if="dataLoaded">导出</button>
- <button class="ctrl-btn" @click="exportPdf()" style="font-size:0.6rem;width:auto;padding:0 6px" v-if="dataLoaded">PDF</button>
  <button class="ctrl-btn" @click="zm(1.4)">+</button>
  <button class="ctrl-btn" @click="zm(0.7)">&minus;</button>
  <button class="ctrl-btn" @click="reset()" style="font-size:0.65rem">&circlearrowleft;</button>
@@ -242,7 +281,6 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
  <div class="tip-head">
   <div class="tip-n" :style="{background:tip.color}">{{tip.id}}</div>
   <div style="flex:1;min-width:0"><div class="tip-name">{{tip.name}}</div><div class="tip-sub">{{tip.en}} · Day {{tip.day}}</div></div>
-  <button class="tip-edit" @click.stop="openEditor(tip)" title="编辑">&#9998;</button>
  </div>
  <!-- Photos Carousel -->
  <div v-if="tip.imgs?.length" class="carousel" @pointerdown.stop @pointermove.stop @touchstart="carTs" @touchend="carTe">
@@ -269,6 +307,7 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
   <span v-if="tip.fee" class="tag t-fee">{{tip.fee}}</span>
   <span v-if="tip.bk" class="tag t-bk">需预约</span>
   <span v-if="tip.wrn" class="tag t-wrn">注意安全</span>
+  <button class="tag t-nav" @click.stop="openDriveQuery(tip)">&#128663; 查车程</button>
  </div>
  <div v-if="tip.route" class="sec"><div class="sec-t">交通</div><div class="route-txt">{{tip.route}}</div></div>
  <div class="sec"><div class="sec-t">必打卡</div><ul><li v-for="h in tip.hl">{{h}}</li></ul></div>
@@ -291,7 +330,7 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 
 <!-- Meta Editor -->
 <div class="editor-backdrop" v-if="metaEditing" @click.self="metaEditing=false">
- <div class="editor" style="max-width:340px">
+ <div class="editor" style="max-width:380px">
   <div class="editor-head">
    <h3>行程信息</h3>
    <button class="editor-close" @click="metaEditing=false">&times;</button>
@@ -308,35 +347,70 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
    <div class="editor-label">路线方向</div>
    <input class="meta-input" v-model="tripMeta.direction" placeholder="如: 逆时针环岛"/>
   </div>
+  <div class="editor-section" style="border-top:1px solid #eee;padding-top:14px;margin-top:14px">
+   <div class="editor-label">申请人姓名 (签证用)</div>
+   <input class="meta-input" v-model="tripMeta.name" placeholder="如: ZHANG San"/>
+  </div>
+  <div class="editor-section">
+   <div class="editor-label">护照号码</div>
+   <input class="meta-input" v-model="tripMeta.passport" placeholder="如: E12345678"/>
+  </div>
+  <div class="editor-section">
+   <div class="editor-label">国籍</div>
+   <input class="meta-input" v-model="tripMeta.nationality" placeholder="如: Chinese"/>
+  </div>
+  <div class="editor-section">
+   <div class="editor-label">入境航班</div>
+   <input class="meta-input" v-model="tripMeta.entryFlight" placeholder="如: FI209 PEK-KEF 09:30-14:00"/>
+  </div>
+  <div class="editor-section">
+   <div class="editor-label">出境航班</div>
+   <input class="meta-input" v-model="tripMeta.exitFlight" placeholder="如: FI208 KEF-PEK 16:30-08:00+1"/>
+  </div>
  </div>
 </div>
 
-<!-- Editor -->
-<div class="editor-backdrop" v-if="editing" @click.self="closeEditor">
- <div class="editor">
-  <div class="editor-head">
-   <h3>编辑景点</h3>
-   <button class="editor-close" @click="closeEditor">&times;</button>
-  </div>
-  <div class="editor-section">
-   <div class="editor-label">日期 / Day</div>
-   <select class="day-select" :value="editSpot?.day" @change="changeDay($event.target.value)">
-    <option v-for="d in days" :key="d.id" :value="d.id">{{dayLabel(d)}}</option>
-   </select>
-  </div>
-  <div class="editor-section">
-   <div class="editor-label">当日顺序 (拖拽调整)</div>
-   <ul class="order-list" ref="orderListRef">
-    <li v-for="(s,i) in daySpots" :key="s.id" class="order-item"
+<!-- Plan Editor -->
+<div class="plan-editor" v-if="planEditing">
+ <div class="plan-header">
+  <h2>编辑行程</h2>
+  <button class="editor-close" @click="closePlanEditor">&times;</button>
+ </div>
+ <div class="plan-tabs" @wheel.prevent="$event.currentTarget.scrollLeft+=$event.deltaY">
+  <button v-for="d in days" :key="d.id" class="plan-tab" :class="{active:planDay===d.id}" :style="planDay===d.id?{background:d.color,borderColor:d.color}:{}" @click="planDay=d.id">{{dayLabel(d)}}</button>
+ </div>
+ <div class="plan-body">
+  <div class="plan-section">
+   <div class="plan-section-title">景点列表</div>
+   <ul class="order-list" v-if="planDaySpots.length">
+    <li v-for="(s,i) in planDaySpots" :key="s.id" class="order-item"
         :class="{dragging:dragIdx===i,over:overIdx===i}"
-        draggable="true" @dragstart="edDragStart(i)" @dragover.prevent="edDragOver(i)"
-        @drop="edDrop(i)" @dragend="edDragEnd"
-        @touchstart="edTouchStart(i,$event)" @touchmove="edTouchMove($event)" @touchend="edTouchEnd">
+        draggable="true" @dragstart="planDragStart(i)" @dragover.prevent="planDragOver(i)"
+        @drop="planDrop(i)" @dragend="planDragEnd">
      <span class="order-dot" :style="{background:s.color}"></span>
-     <span class="order-name">{{s.id}}. {{s.name}}</span>
+     <span class="order-name">{{s.name}}<span style="color:#86868b;margin-left:6px;font-size:0.75rem">{{s.en||''}}</span></span>
+     <input class="dt-input" v-model="s.dt" placeholder="车程" @click.stop/>
+     <button class="order-nav" @click.stop="openDriveQuery(s)" title="查车程">&#128663;</button>
+     <button class="order-rm" @click.stop="removeSpotFromDay(s)" title="移除">&times;</button>
      <span class="order-handle">☰</span>
     </li>
    </ul>
+   <div v-else style="color:#86868b;font-size:0.85rem;padding:12px 0">当天无景点</div>
+   <div class="plan-add" v-if="otherSpots.length">
+    <select class="day-select" @change="addSpotToDay($event.target.value);$event.target.value=''">
+     <option value="">添加景点...</option>
+     <option v-for="s in otherSpots" :key="s.id" :value="s.id">{{s.name}} (Day {{s.day}})</option>
+    </select>
+   </div>
+  </div>
+  <div class="plan-section">
+   <div class="plan-section-title">住宿信息</div>
+   <div class="htl-form" v-if="planDayHtl">
+    <div class="htl-row"><label>名称</label><input class="meta-input" v-model="planDayHtl.name" placeholder="酒店名称"/></div>
+    <div class="htl-row"><label>地址</label><input class="meta-input" v-model="planDayHtl.addr" placeholder="酒店地址"/></div>
+    <div class="htl-row"><label>电话</label><input class="meta-input" v-model="planDayHtl.tel" placeholder="联系电话"/></div>
+    <div class="htl-row"><label>链接</label><input class="meta-input" v-model="planDayHtl.url" placeholder="预订链接"/></div>
+   </div>
   </div>
  </div>
 </div>
@@ -349,7 +423,7 @@ createApp({setup(){
 const landPath=`M759.9,26.2 L741.2,26.8 L734.6,32.6 L727.2,30.1 L720.1,29 L710.2,29.9 L704.5,35.2 L709.2,43.7 L709.5,51.2 L710.4,62.9 L715.2,73.5 L713.3,81.1 L702.8,87.5 L689.6,94 L679.6,94.2 L677,85.4 L669.9,81.8 L662.1,82.2 L648.6,85.1 L645.3,93.8 L645.5,99.7 L638,98 L638.4,102.8 L639.1,107.9 L634.9,117.5 L626.6,119.4 L616.9,116.7 L612.9,108.9 L605.1,102 L597.5,96.9 L605.8,89.1 L596.3,87.7 L593.2,92.1 L585.6,90 L572.4,87.9 L558.4,88.9 L554.1,98 L558.2,108.1 L553.9,111.9 L548,112.5 L545.2,108.1 L541.1,101.8 L536.6,95.1 L529.3,89.6 L517.4,83 L502.5,84.7 L492.6,90.2 L486.7,102.2 L465.4,103.2 L458.3,110.4 L462.3,120 L456.6,120.7 L453.8,125 L455.4,132.1 L460.6,139.6 L463.7,147.1 L463.9,156.7 L458.7,156.3 L451.4,156.7 L445.2,158.1 L445.2,148 L441.2,139.6 L435.5,134.6 L427.7,129.6 L425.8,121.9 L418.5,110.2 L410.2,97.4 L402.6,95 L392.7,95.1 L380.6,98 L373,102.2 L369.9,115 L378.5,132.4 L380.1,147.3 L385.1,165.4 L383.9,177.2 L378,183.2 L365.4,185 L364,178.6 L360.7,172.6 L353.4,170.2 L337,178.4 L328.3,188.7 L327.8,201.2 L324,208.6 L318.1,210.5 L314.8,222.5 L311.7,210.5 L307.4,205.4 L307.2,198.6 L304.4,187.5 L298.9,185.6 L296.3,181.3 L284.9,176.8 L296.8,176.1 L298.7,173 L301.3,165 L298.2,159.8 L302.5,159 L305.3,151.1 L306.7,146.3 L306.5,140.1 L306.7,135.3 L303.4,128.2 L298.9,126.1 L300.6,123.8 L302.9,122.3 L302.7,118.4 L294.9,113.3 L287.8,114.8 L284.5,105.4 L280,103 L273.6,104.1 L271.4,107.7 L267.2,106.2 L268.1,101.8 L265.5,98.8 L268.6,93.6 L265.5,91.3 L268.4,88.1 L262.7,87 L254.2,85.3 L248.9,82.2 L250.6,80.3 L248.7,76.3 L248.2,74.1 L243.5,71.4 L238.1,72.9 L234.5,68.8 L229.8,69.9 L225.7,67.8 L227.4,61.2 L222.7,60.4 L218.4,54.2 L213.9,51.2 L212.2,46.3 L208.9,40.7 L199.2,39 L198.5,42.7 L196.1,39.5 L185.3,38.1 L181.8,44.6 L172.2,38.3 L158.4,36.8 L154.8,39.7 L149.4,41.6 L139.6,44.1 L142.9,49.2 L143,54.7 L135.4,57.1 L135.1,62.3 L146.8,70.8 L165.2,69.6 L175.1,69.7 L179,73.3 L163.2,74 L156.1,77.3 L152.8,80.2 L157.9,88.3 L165.1,95.4 L176.7,99.5 L179.5,104.5 L186.1,105.9 L190.6,106 L194.4,110.2 L197.6,115.4 L201.7,121.6 L197.4,120.1 L194,120.4 L192.4,116.1 L185.1,109.3 L179,109.1 L168.1,107.5 L162.3,109.3 L161.2,103.5 L151.3,99.7 L145,94.1 L130.1,86.9 L120.3,83.6 L107.4,84.4 L101.2,89.8 L98.5,95.6 L92,98 L98.7,106.8 L89.7,104.7 L84.2,106.8 L81.3,114.8 L84.9,121 L90.5,129.8 L86.5,130 L80.7,132.2 L78.1,137.4 L78,145.6 L82,153.4 L77.4,153.3 L68.3,151.5 L58.1,152.1 L55.4,161.1 L59.6,171.7 L63,177.3 L59.1,178.9 L62.4,187.6 L57.6,185.3 L46.1,178.7 L39.4,179.7 L35.6,186.6 L32.3,195.2 L25.3,199.2 L19.9,204.6 L24.7,208.7 L31.6,208.8 L40.8,208.6 L49.1,206.7 L67.8,215.6 L66.6,219.2 L72.2,222.6 L82.8,222.9 L95.4,221.1 L100.4,214.3 L113.5,211.6 L120.3,210.1 L137.1,210.3 L143.2,205.9 L142.4,199 L149.3,201.2 L158.9,199.3 L159.3,203.7 L161,205.8 L166.1,203.4 L169.2,204.5 L165.7,207.9 L169.5,209.6 L173.8,207.8 L180.6,207.9 L185.1,205 L190.7,203.2 L195.2,203.2 L198.4,206.4 L203.1,207.6 L201.2,208.9 L200.8,212.3 L207.7,212.6 L212.5,214.5 L214.4,218.2 L220.8,219.2 L223.5,221.8 L223.7,225.1 L217.9,225.9 L216.7,228.1 L217.8,231.3 L223.7,230.8 L226.2,228.7 L225.6,226.6 L230.5,226.1 L231.4,224.7 L231.9,221.9 L233.8,218.8 L236.5,215.6 L239,217.2 L240.2,220.3 L243.9,220.5 L239.9,224 L234.3,227.7 L227.2,230.6 L222.7,233.9 L216.3,236.4 L208,238.7 L205.1,242.9 L199.3,243.4 L195.8,247.3 L197,250.4 L193.5,256 L188.6,257.6 L183.2,260.6 L179.9,265.8 L175.9,266.2 L174.1,267.9 L172.1,265.4 L169,265.5 L168.9,267.5 L173.2,270.4 L179.6,272.1 L182.2,273.6 L186.4,275.6 L192.1,278 L191.6,281.1 L186.7,285.4 L184.9,282.7 L183,278.9 L180.9,274.1 L178.2,274.8 L177.1,276.4 L170,276.9 L165.6,279.5 L166.3,283.3 L163.2,285.8 L158.6,285.7 L152.3,287.1 L149.3,293.9 L147.6,294.4 L149.4,289.6 L147.3,288.7 L143.2,288.4 L137.7,287.5 L132.8,292.3 L134.6,300.2 L133,300.6 L130.6,299.3 L127.6,294.8 L123,295 L116.8,298.3 L111.6,298.4 L106.6,303.8 L101,304.6 L98.8,307.5 L89.6,305.2 L85.8,303.2 L83.1,301.5 L74.2,304.1 L68.2,309.4 L65,308.8 L62,310.3 L65.3,319.5 L66.9,322.5 L71.4,330.4 L74.8,335.8 L78.2,336.7 L83.4,340.1 L88.8,340 L94.2,338.2 L101.1,337.9 L105.2,332 L103.3,329.7 L105.3,327.8 L111.4,326.8 L116.9,329.1 L122.7,327.9 L124.9,324.1 L127.4,323.3 L141.1,326.3 L147,327.5 L152.1,329.2 L157.1,326.8 L160.4,328.9 L166.8,328.3 L172.6,329 L180.2,332.4 L186.9,332.9 L196.7,332.2 L199.5,334.5 L206.6,334.8 L208.8,336.3 L207.4,340.3 L202.8,344.5 L200.6,348.5 L202.2,351.4 L205.5,354.5 L208.2,358.7 L207.5,370 L208.5,375.8 L213.3,376.7 L217,382 L223.8,386.5 L231.2,385.7 L236.4,386.4 L232.3,393.6 L237.6,398.7 L229.4,405.7 L228.7,410.8 L238.8,414.5 L247.1,415.5 L245.2,421.5 L245.3,425.1 L253.6,425.5 L253.2,427.4 L255.6,430 L253.1,430.6 L247.1,430.4 L242.2,431.5 L237.8,433.3 L234.6,436.1 L236.6,441 L233.6,445.5 L234.7,450.7 L225.3,455 L216.5,454.8 L206.8,458.9 L201.1,463.1 L198.3,459.1 L194,453 L189.5,446.6 L183.6,443.9 L177.4,446.2 L175.5,459.5 L172.2,467.2 L177.2,475 L172.7,481 L172.7,487.9 L172.9,496.8 L181.9,499.9 L202.8,498.5 L213.9,493.7 L233.6,495.4 L260.5,491.4 L268.1,496.8 L285.9,493.1 L298.2,492.9 L302,488.3 L307,487.5 L337.7,502 L362.8,522.2 L396.9,546.1 L414.9,547 L432.7,547.4 L461.1,557.1 L486.2,569.1 L500.9,567 L524.6,570.1 L556,561.1 L582.1,554.7 L595.8,543.4 L604.3,529.4 L615,515.1 L644.1,505.1 L661.2,503.9 L695,502.6 L706.9,498.7 L718.5,483.1 L740.5,462.6 L753,451.7 L771.7,440.2 L785,436.5 L787.6,432.2 L798,428.1 L815.5,426.2 L835.7,425.4 L849.9,424.6 L854.4,420.7 L857.5,415.2 L856.5,410.1 L863.4,405 L871.2,400.1 L885.9,398.7 L888.5,394.4 L892.5,384.4 L894.9,375.7 L895.8,369.4 L893,365.8 L898.7,363.2 L906,359.9 L913.3,354.1 L913.3,349.5 L916.9,348.4 L930.1,344.4 L935.8,338.6 L936.3,330.6 L944.6,329.1 L949.3,326.1 L950,323.3 L957.1,316.3 L956.9,311.1 L961.6,307.9 L962.8,302.5 L960.5,297 L969,293.8 L972.3,287.6 L977.3,284.4 L978.2,274.3 L976.1,271.5 L976.8,264 L974.4,258.5 L965.4,264.8 L967.1,255.5 L973.2,246.6 L969.7,241.5 L963.3,239.2 L957.4,234.2 L960.7,230.5 L964.2,227 L966.8,216 L967.3,209 L967.1,201.2 L961.9,198.4 L957.1,192.4 L951,194.7 L949.6,192.8 L947,189.7 L945.5,185.6 L938,182.9 L932.7,184.8 L924,182.5 L906.9,173.9 L902.2,166.8 L908.6,155 L903.6,154 L894.4,156.7 L878.8,158.8 L864.3,162.7 L868.3,155.7 L863.8,154.4 L866,150 L872.6,147.6 L872.8,144 L879.7,134.4 L880.7,121.5 L877.1,118.4 L875.5,111.9 L866.7,108.1 L856.7,114.6 L850.6,111.9 L841.6,110.8 L840.9,102 L834.3,100.5 L851.8,90.2 L853.7,82 L849.4,74.1 L883.5,61 L889.4,54.2 L883.3,52.7 L867.6,55.5 L857.2,51.6 L842.5,58.7 L831.2,72.7 L818.2,73.5 L812.7,75 L811.3,91 L796.8,78.6 L788.1,78.6 L789.3,75.8 L783.3,71.6 L788.3,63.1 L785.9,50.4 L768.2,45 L769.1,36 L759.9,26.2 Z M399.5,551.6 L390.3,553.3 L383.7,556.2 L385.6,563.6 L381.1,561.3 L379.6,567.2 L380.6,574.3 L384.9,572 L390.5,569.9 L393.4,564.2 L398.4,563.2 L403.3,554.1 L399.5,551.6 Z M362.7,580.2 L359.9,581.8 L359.9,583.1 L362.1,584.9 L364,582.7 L362.7,580.2 Z M191.8,235.4 L190.1,237.3 L192.1,238.2 L193.4,236.6 L191.8,235.4 Z M201.8,225.4 L198.5,225.7 L198,226.9 L198.6,228.4 L201.5,227.2 L201.8,225.4 Z M190.7,219.5 L188.1,220.2 L188.2,221.4 L186.8,221.8 L184.8,223.8 L185.3,224.1 L188.7,223.2 L189,221.9 L190.4,221.5 L190.7,219.5 Z M188.2,212.4 L186.2,213 L183.6,214.2 L180.6,217.7 L181.2,218.4 L182.2,218.7 L183.6,218.5 L184.4,217.1 L187.5,215.8 L188.4,214.4 L190.5,213 L188.2,212.4 Z M175.2,217 L173.6,217.8 L172,219.1 L171.9,219.8 L173.9,220.7 L176,220.1 L175.5,221 L173.7,222 L173.6,223.5 L172.2,224.3 L170.9,226.1 L169.1,228.5 L167.7,229.6 L166,231.2 L166.3,232.1 L169.6,230.5 L171,228.8 L172.4,228.6 L174.1,226.4 L175.5,226.6 L176.1,225.6 L175.6,224.4 L177.4,222.9 L177.6,221.7 L179.4,218.2 L178.4,217.9 L176.4,219 L176.3,217.3 L175.2,217 Z M162.5,224.7 L160.4,225.4 L159,227 L158.7,227.8 L159.6,228.9 L160.5,229.4 L162.9,228.8 L164.5,227.7 L164.8,226 L164.1,225.2 L162.9,226.2 L162.5,224.7 Z M154.7,215.1 L152.6,216.7 L152.8,217.4 L154.2,217.6 L155.2,216.7 L154.2,216 L154.9,216 L155.5,215.6 L156.5,216.5 L156.6,215.5 L154.7,215.1 Z M143.9,210.6 L142.4,211.1 L141.8,211.8 L141.5,212.7 L141.8,213.9 L142.9,214.3 L143.5,214.2 L143.2,213.8 L142.4,213.4 L142.2,212.7 L142.7,212 L143.6,211.5 L144.8,211 L143.9,210.6 Z M151.5,210.3 L150.9,211.1 L149.9,211.2 L149.8,211.5 L150.2,211.9 L150.9,211.7 L151.1,211.2 L151.7,211 L151.9,210.5 L151.5,210.3 Z M151.5,221 L151.3,221 L151.1,221.4 L151.6,221.7 L152.3,221.5 L151.5,221 Z M160.6,222.4 L160.2,222.5 L160,222.8 L159.3,223.1 L158.9,223.6 L158.5,223.7 L158.4,223.8 L159.1,223.6 L160.4,223 L160.8,222.6 L160.6,222.4 Z M161.4,211.2 L160.2,211.5 L160.1,212.2 L160.5,212.3 L160.7,211.8 L161.5,211.4 L161.4,211.2 Z M159.9,213.2 L159.4,213.3 L159.5,213.9 L159.4,214.3 L159.3,214.7 L160,214.8 L160,214.3 L159.7,213.9 L159.9,213.2 Z M196.4,234.1 L196.3,234.7 L196.8,235.2 L197.6,234.8 L196.4,234.1 Z M190.4,228.1 L190.1,228.2 L189.9,228.8 L188.9,229.1 L188.7,228.4 L188.4,228.6 L188.8,229.2 L187.7,230.1 L187.8,230.6 L188.7,230.4 L189.4,230.6 L189.9,230.2 L189.7,229.2 L191,229.1 L191.3,228.5 L190.4,228.1 Z M160,223.6 L159.8,223.6 L159.7,223.9 L159.8,224.1 L160.2,223.9 L160,223.6 Z M158.1,220.2 L157.1,220.3 L157,220.3 L157.1,220.4 L157.5,220.6 L158.1,220.2 Z M151.8,214 L150.4,214.3 L149.9,214.8 L150.1,215 L150.5,214.7 L150.5,214.3 L151.1,214.4 L151.7,214.2 L151.8,214 Z M183.3,219.6 L182.9,219.8 L182.9,219.9 L183.1,220 L183.4,220.3 L183.2,220.5 L183.3,220.8 L183.8,220.5 L183.9,220.1 L183.4,220.2 L183.3,219.6 Z M440.6,128 L439.7,129.8 L441,130.1 L441.5,128.5 L440.6,128 Z M453,114.3 L452,115.2 L453.2,117.3 L453.2,118.8 L455,120.9 L454.6,118 L455,116.4 L453.8,115.9 L453,114.3 Z M584.5,22.1 L583.7,22.3 L584.5,24.3 L583.4,25.2 L583.2,27.7 L584.9,28.3 L585.9,29.9 L588.1,30.3 L588.8,26.4 L584.5,22.1 Z M914.1,358.6 L913.7,358.7 L912.7,359 L912.7,359.5 L913.7,359.7 L914.5,359.8 L914.1,360.8 L914.4,361.5 L914.2,362.1 L915.3,362.3 L914.8,362.7 L915.4,363.2 L916.7,362.9 L918.1,362.2 L918.3,361.2 L917.7,359.7 L918.8,360.2 L919.7,359.6 L921.4,359.8 L921.5,359.2 L918.8,359.4 L916.7,359.1 L914.8,359.5 L914.1,358.6 Z M921.5,368.6 L920.7,369.1 L920.9,369.5 L921.7,369.1 L921.5,368.6 Z`;
 
 const days=ref([]);
-const tripMeta=reactive({startDate:'',people:'',direction:''});
+const tripMeta=reactive({startDate:'',people:'',direction:'',name:'',passport:'',nationality:'',entryFlight:'',exitFlight:''});
 
 const cities=[
 {n:'雷克雅未克',x:247,y:437,ox:5,oy:-5},
@@ -363,6 +437,8 @@ const cities=[
 const spots=ref([]);
 const dataLoaded=ref(false);
 const metaEditing=ref(false);
+const planEditing=ref(false);
+const planDay=ref(null);
 
 const dateRangeDisplay=computed(()=>{
  if(!tripMeta.startDate||!days.value.length)return'';
@@ -400,22 +476,25 @@ function importData(){
     }else if(data.spots){
      if(data.days){
       days.value=data.days.map(d=>{
-       if(d.label&&!d.name){
-        const m=d.label.match(/^\d+\.\d+\s+(.+)$/);
-        return{...d,name:m?m[1]:d.label};
-       }
-       return d;
+       const name=d.name||(d.label?((d.label.match(/^\d+\.\d+\s+(.+)$/)||[])[1]||d.label):('Day '+d.id));
+       return{id:d.id,color:d.color,name,htl:d.htl||{name:'',addr:'',tel:'',url:''}};
       });
      }
      if(data.meta){
       tripMeta.startDate=data.meta.startDate||'';
       tripMeta.people=data.meta.people||'';
       tripMeta.direction=data.meta.direction||'';
+      tripMeta.name=data.meta.name||'';
+      tripMeta.passport=data.meta.passport||'';
+      tripMeta.nationality=data.meta.nationality||'';
+      tripMeta.entryFlight=data.meta.entryFlight||'';
+      tripMeta.exitFlight=data.meta.exitFlight||'';
      }
      spots.value=data.spots;
      if(!data.days)deriveDays();
     }
     dataLoaded.value=true;
+    saveToLocal();
    }catch(err){alert('导入失败: '+err.message);}
   };
   reader.readAsText(file);
@@ -423,12 +502,43 @@ function importData(){
  input.click();
 }
 function exportData(){
- const data={meta:{startDate:tripMeta.startDate,people:tripMeta.people,direction:tripMeta.direction},days:days.value,spots:spots.value};
+ const data={meta:{startDate:tripMeta.startDate,people:tripMeta.people,direction:tripMeta.direction,name:tripMeta.name,passport:tripMeta.passport,nationality:tripMeta.nationality,entryFlight:tripMeta.entryFlight,exitFlight:tripMeta.exitFlight},days:days.value,spots:spots.value};
  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob);
  const a=document.createElement('a');
  a.href=url;a.download='iceland-trip-data.json';a.click();
  URL.revokeObjectURL(url);
+}
+function saveToLocal(){
+ const data={meta:{startDate:tripMeta.startDate,people:tripMeta.people,direction:tripMeta.direction,name:tripMeta.name,passport:tripMeta.passport,nationality:tripMeta.nationality,entryFlight:tripMeta.entryFlight,exitFlight:tripMeta.exitFlight},days:days.value,spots:spots.value};
+ try{localStorage.setItem('iceland-trip',JSON.stringify(data));}catch(e){}
+}
+function loadFromLocal(){
+ try{
+  const raw=localStorage.getItem('iceland-trip');
+  if(!raw)return;
+  const data=JSON.parse(raw);
+  if(!data.spots)return;
+  if(data.days){
+   days.value=data.days.map(d=>{
+    const name=d.name||(d.label?((d.label.match(/^\d+\.\d+\s+(.+)$/)||[])[1]||d.label):('Day '+d.id));
+    return{id:d.id,color:d.color,name,htl:d.htl||{name:'',addr:'',tel:'',url:''}};
+   });
+  }
+  if(data.meta){
+   tripMeta.startDate=data.meta.startDate||'';
+   tripMeta.people=data.meta.people||'';
+   tripMeta.direction=data.meta.direction||'';
+   tripMeta.name=data.meta.name||'';
+   tripMeta.passport=data.meta.passport||'';
+   tripMeta.nationality=data.meta.nationality||'';
+   tripMeta.entryFlight=data.meta.entryFlight||'';
+   tripMeta.exitFlight=data.meta.exitFlight||'';
+  }
+  spots.value=data.spots;
+  if(!data.days)deriveDays();
+  dataLoaded.value=true;
+ }catch(e){}
 }
 function deriveDays(){
  const map={};
@@ -438,7 +548,6 @@ function deriveDays(){
  });
  days.value=Object.values(map).sort((a,b)=>Number(a.id)-Number(b.id));
 }
-function saveSpots(){}
 function exportPdf(){
  const grouped={};
  spots.value.forEach(s=>{
@@ -446,79 +555,62 @@ function exportPdf(){
   grouped[s.day].push(s);
  });
  const dayOrder=days.value.map(d=>d.id);
- let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>冰岛环岛自驾攻略</title><style>
+ const isFirst=i=>i===0;
+ const isLast=i=>i===dayOrder.length-1;
+ let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Travel Itinerary - Iceland</title><style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;color:#1d1d1f;padding:40px;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.day-title{font-size:1.3rem;font-weight:700;margin:32px 0 16px;padding:8px 14px;border-left:4px solid #6366f1;background:rgba(99,102,241,0.05);border-radius:0 8px 8px 0;page-break-after:avoid}
-.spot-card{page-break-inside:avoid;margin-bottom:28px;padding:20px;background:#fff;border:1px solid rgba(0,0,0,0.06);border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
-.spot-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(0,0,0,0.06)}
-.spot-n{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:#fff;flex-shrink:0}
-.spot-name{font-size:1.05rem;font-weight:700;letter-spacing:-0.3px}
-.spot-sub{font-size:0.7rem;color:#86868b;margin-top:2px}
-.spot-img{width:100%;max-height:240px;object-fit:cover;border-radius:10px;margin-bottom:12px}
-.meta{display:flex;flex-wrap:wrap;gap:6px 12px;margin-bottom:10px;padding:8px 10px;background:rgba(0,0,0,0.02);border-radius:8px;font-size:0.72rem;color:#86868b}
-.meta .val{color:#1d1d1f;font-weight:600}
-.history{font-size:0.72rem;line-height:1.55;color:#555;margin-bottom:12px;padding:8px 10px;background:rgba(0,0,0,0.02);border-radius:8px;border-left:3px solid rgba(0,0,0,0.08)}
-.tags{margin-bottom:12px;display:flex;flex-wrap:wrap;gap:5px}
-.tag{display:inline-flex;padding:3px 9px;border-radius:6px;font-size:0.66rem;font-weight:600}
-.t-drv{background:#fef8ec;color:#b07c1a;border:1px solid #f5e6c0}
-.t-dur{background:#ecf9f3;color:#1a7a4c;border:1px solid #c8edda}
-.t-dep{background:#eef0fb;color:#4a50a0;border:1px solid #d0d5f0}
-.t-bk{background:#f5ecfb;color:#7b3fa0;border:1px solid #e4cdf2}
-.t-wrn{background:#fef0ee;color:#c53030;border:1px solid #fcd5d0}
-.t-fee{background:#f0f9ff;color:#0369a1;border:1px solid #bae6fd}
-.sec{margin-bottom:12px}
-.sec-t{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.sec-t::before{content:'';display:inline-block;width:3px;height:11px;border-radius:2px;background:#1d1d1f;opacity:0.2}
-.sec ul{list-style:none;padding:0}
-.sec li{font-size:0.76rem;line-height:1.6;color:#424245;padding-left:12px;position:relative;margin-bottom:3px}
-.sec li::before{content:'\\203A';position:absolute;left:0;color:#86868b;font-weight:600}
-.row{display:flex;justify-content:space-between;font-size:0.73rem;padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.04)}
-.row:last-child{border:none}
-.row-n{color:#1d1d1f;font-weight:500}
-.row-p{color:#86868b;font-size:0.68rem}
-.route-txt{font-size:0.72rem;color:#555;line-height:1.5}
-.insider li{color:#0369a1}
-.insider li::before{content:'\\2605';color:#f59e0b;font-size:0.55rem}
-.rec{color:#1a7a4c;font-size:0.68rem;font-style:italic;margin-top:4px}
-@media print{body{padding:20px}.spot-card{box-shadow:none;border:1px solid #ddd}}
-</style></head><body><h1 style="text-align:center;margin-bottom:8px">冰岛环岛自驾攻略</h1><p style="text-align:center;color:#86868b;margin-bottom:24px">9.24–10.6 · 逆时针环岛</p>`;
- dayOrder.forEach(dayId=>{
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;color:#1d1d1f;padding:30px 40px;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:13px}
+h1{text-align:center;font-size:1.3rem;margin-bottom:2px}
+h2{text-align:center;font-size:0.85rem;font-weight:400;color:#555;margin-bottom:18px}
+table{width:100%;border-collapse:collapse;font-size:0.78rem;margin-top:8px}
+th{background:#f0f0f5;font-weight:600;text-align:left;padding:7px 8px;border:1px solid #bbb;font-size:0.72rem}
+td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}
+.date-col{white-space:nowrap;font-weight:500}
+.spots-col{line-height:1.6}
+.htl-name{font-weight:500}
+.htl-addr{color:#555;font-size:0.72rem}
+.htl-tel{color:#555;font-size:0.72rem}
+.transport{font-size:0.72rem;color:#555}
+.footer{margin-top:16px;font-size:0.75rem;color:#666;line-height:1.8}
+@media print{body{padding:15px 20px}table{font-size:0.72rem}@page{margin:12mm 15mm}}
+</style></head><body>
+<h1>Travel Itinerary 行程单</h1>
+<h2>Iceland Self-drive Trip 冰岛自驾环岛 · ${dateRangeDisplay.value}</h2>
+<table><thead><tr><th style="width:11%">Date<br>日期</th><th style="width:12%">City/Region<br>城市</th><th style="width:12%">Transport<br>交通</th><th style="width:32%">Activities<br>活动</th><th style="width:33%">Accommodation<br>住宿</th></tr></thead><tbody>`;
+ dayOrder.forEach((dayId,idx)=>{
   const d=days.value.find(x=>x.id===dayId);
-  const label=d?dayLabel(d):('Day '+dayId);
-  const color=d?d.color:'#6366f1';
-  html+=`<div class="day-title" style="border-left-color:${color}">${label}</div>`;
+  if(!d)return;
+  const s0=new Date(tripMeta.startDate);
+  s0.setDate(s0.getDate()+Number(dayId)-1);
+  const dateStr=s0.getFullYear()+'-'+String(s0.getMonth()+1).padStart(2,'0')+'-'+String(s0.getDate()).padStart(2,'0');
+  const weekdays=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const wday=weekdays[s0.getDay()];
+  const region=d.name||'';
   const dSpots=grouped[dayId]||[];
-  dSpots.forEach(s=>{
-   html+=`<div class="spot-card"><div class="spot-head"><div class="spot-n" style="background:${s.color}">${s.id}</div><div><div class="spot-name">${s.name}</div><div class="spot-sub">${s.en||''} · Day ${s.day}</div></div></div>`;
-   if(s.imgs&&s.imgs.length)html+=`<img class="spot-img" src="${s.imgs[0]}" alt="${s.name}"/>`;
-   if(s.gps||s.fee||s.season){
-    html+=`<div class="meta">`;
-    if(s.gps)html+=`<span>GPS: <span class="val">${s.gps}</span></span>`;
-    if(s.fee)html+=`<span>门票: <span class="val">${s.fee}</span></span>`;
-    if(s.season)html+=`<span>季节: <span class="val">${s.season}</span></span>`;
-    html+=`</div>`;
-   }
-   if(s.history)html+=`<div class="history">${s.history}</div>`;
-   html+=`<div class="tags">`;
-   if(s.drv)html+=`<span class="tag t-drv">${s.drv}</span>`;
-   if(s.dur)html+=`<span class="tag t-dur">停留 ${s.dur}</span>`;
-   if(s.dep)html+=`<span class="tag t-dep">${s.dep}</span>`;
-   if(s.fee)html+=`<span class="tag t-fee">${s.fee}</span>`;
-   if(s.bk)html+=`<span class="tag t-bk">需预约</span>`;
-   if(s.wrn)html+=`<span class="tag t-wrn">注意安全</span>`;
-   html+=`</div>`;
-   if(s.route)html+=`<div class="sec"><div class="sec-t">交通</div><div class="route-txt">${s.route}</div></div>`;
-   if(s.hl&&s.hl.length)html+=`<div class="sec"><div class="sec-t">必打卡</div><ul>${s.hl.map(h=>'<li>'+h+'</li>').join('')}</ul></div>`;
-   if(s.ph&&s.ph.length)html+=`<div class="sec"><div class="sec-t">拍照机位</div><ul>${s.ph.map(p=>'<li>'+p+'</li>').join('')}</ul></div>`;
-   if(s.insider&&s.insider.length)html+=`<div class="sec insider"><div class="sec-t">内行贴士</div><ul>${s.insider.map(t=>'<li>'+t+'</li>').join('')}</ul></div>`;
-   if(s.rest&&s.rest.length)html+=`<div class="sec"><div class="sec-t">餐厅</div>${s.rest.map(r=>'<div class="row"><span class="row-n">'+r.n+'</span><span class="row-p">'+(r.p||'')+'</span></div>').join('')}${s.rest[0]&&s.rest[0].r?'<div class="rec">推荐: '+s.rest[0].r+'</div>':''}</div>`;
-   if(s.htl&&s.htl.length)html+=`<div class="sec"><div class="sec-t">住宿</div>${s.htl.map(h=>'<div class="row"><span class="row-n">'+h.n+'</span><span class="row-p">'+(h.p||'')+'</span></div>').join('')}</div>`;
-   if(s.notes&&s.notes.length)html+=`<div class="sec"><div class="sec-t">注意事项</div><ul>${s.notes.map(n=>'<li'+(n[0]==='⚠'?' style="color:#c53030"':'')+'>'+n+'</li>').join('')}</ul></div>`;
-   html+=`</div>`;
-  });
+  const spotLines=dSpots.map(sp=>{
+   const cn=sp.sn||sp.name;
+   const en=sp.en||'';
+   return en?`${cn} / ${en}`:cn;
+  }).join('<br>');
+  let transport='Self-drive<br>自驾';
+  if(isFirst(idx))transport='Flight + Self-drive<br>航班+自驾';
+  if(isLast(idx))transport='Self-drive + Flight<br>自驾+航班';
+  const htl=d.htl||{name:'',addr:'',tel:'',url:''};
+  let htlHtml='—';
+  if(htl.name){
+   htlHtml=`<div class="htl-name">${htl.name}</div>`;
+   if(htl.addr)htlHtml+=`<div class="htl-addr">${htl.addr}</div>`;
+   if(htl.tel)htlHtml+=`<div class="htl-tel">Tel: ${htl.tel}</div>`;
+  }
+  html+=`<tr><td class="date-col">${dateStr}<br>(${wday})</td><td>${region}</td><td class="transport">${transport}</td><td class="spots-col">${spotLines||'—'}</td><td>${htlHtml}</td></tr>`;
  });
- html+=`</body></html>`;
+ html+=`</tbody></table>
+<div class="footer">
+ <p><b>Notes 备注:</b></p>
+ <p>1. Transportation within Iceland: Self-drive rental car 冰岛境内交通方式：自驾租车</p>
+ <p>2. All accommodations have been booked in advance 所有住宿均已提前预订</p>
+</div>
+</body></html>`;
  const w=window.open('','_blank');
  w.document.write(html);
  w.document.close();
@@ -535,11 +627,8 @@ const carIdx=ref(0);
 const lbOpen=ref(false);
 const lbImgs=ref([]);
 const lbIdx=ref(0);
-const editing=ref(false);
-const editSpot=ref(null);
 const dragIdx=ref(null);
 const overIdx=ref(null);
-const orderListRef=ref(null);
 
 // View state - inertia animation (iOS-like)
 let tx=0,ty=0,tw=1000,th=600;
@@ -619,15 +708,6 @@ const interDayRoutes=computed(()=>{
  return links;
 });
 
-const daySpots=computed(()=>{
- if(!editSpot.value)return[];
- return spots.value.filter(s=>s.day===editSpot.value.day);
-});
-const currentDayLabel=computed(()=>{
- if(!editSpot.value)return'';
- const d=days.value.find(d=>d.id===editSpot.value.day);
- return d?dayLabel(d):'';
-});
 
 function zm(f){
  const nw=Math.min(1000,Math.max(200,tw/f));
@@ -655,7 +735,7 @@ function onWheel(e){
 }
 
 function onDown(e){
- if(e.target.closest('.controls'))return;
+ if(e.target.closest('.controls')||e.target.closest('.controls-left'))return;
  // Mobile: close tooltip when tapping non-spot area
  if(isMobile&&tip.value&&!e.target.closest('.spot')&&!e.target.closest('.tip')){
   hId.value=null;tip.value=null;
@@ -756,8 +836,10 @@ function enter(s,e){
  hTimer=setTimeout(()=>{
   hId.value=s.id;tip.value=s;carIdx.value=0;
   const vw2=window.innerWidth,vh2=window.innerHeight;
+  const rightEdge=planEditing.value?vw2-document.querySelector('.plan-editor')?.offsetWidth||vw2:vw2;
   let l=e.clientX+14,t=e.clientY-16;
-  if(l+380>vw2)l=e.clientX-380;
+  if(l+380>rightEdge)l=e.clientX-380;
+  if(l<10)l=10;
   if(t<50)t=50;
   if(t+520>vh2)t=Math.max(50,vh2-520-10);
   tpos.value={left:l+'px',top:t+'px'};
@@ -776,74 +858,112 @@ function tLeave(){
 
 let hTimer=null,lTimer=null;
 function onKey(e){
- if(editing.value&&e.key==='Escape'){closeEditor();return;}
+ if(planEditing.value&&e.key==='Escape'){closePlanEditor();return;}
  if(!lbOpen.value)return;
  if(e.key==='Escape')lbOpen.value=false;
  if(e.key==='ArrowLeft')lbPrev();
  if(e.key==='ArrowRight')lbNext();
 }
 function renumberSpots(){spots.value.forEach((s,i)=>{s.id=i+1;});}
-function openEditor(s){editSpot.value=s;editing.value=true;hId.value=null;tip.value=null;}
-function closeEditor(){editing.value=false;editSpot.value=null;dragIdx.value=null;overIdx.value=null;}
-function changeDay(nd){
- const s=editSpot.value;if(!s||nd===s.day)return;
- const di=days.value.find(d=>d.id===nd);if(!di)return;
- s.day=nd;s.color=di.color;
+function openPlanEditor(){planEditing.value=true;if(days.value.length&&!planDay.value)planDay.value=days.value[0].id;}
+function closePlanEditor(){planEditing.value=false;}
+const planDaySpots=computed(()=>{
+ if(!planDay.value)return[];
+ return spots.value.filter(s=>s.day===planDay.value);
+});
+const planDayHtl=computed(()=>{
+ const d=days.value.find(d=>d.id===planDay.value);
+ return d?d.htl:{name:'',addr:'',tel:'',url:''};
+});
+const otherSpots=computed(()=>{
+ if(!planDay.value)return[];
+ return spots.value.filter(s=>s.day!==planDay.value);
+});
+function addSpotToDay(spotId){
+ const s=spots.value.find(x=>x.id===Number(spotId));if(!s)return;
+ const di=days.value.find(d=>d.id===planDay.value);if(!di)return;
  const arr=spots.value,idx=arr.indexOf(s);
  if(idx>-1)arr.splice(idx,1);
+ s.day=planDay.value;s.color=di.color;
  let insertAt=arr.length;
- for(let i=0;i<arr.length;i++){if(arr[i].day===nd)insertAt=i+1;}
+ for(let i=0;i<arr.length;i++){if(arr[i].day===planDay.value)insertAt=i+1;}
  arr.splice(insertAt,0,s);
  renumberSpots();
- saveSpots();
 }
-function reorderSpot(from,to){
+function removeSpotFromDay(spot){
+ const firstOther=days.value.find(d=>d.id!==planDay.value);
+ if(!firstOther)return;
+ const arr=spots.value,idx=arr.indexOf(spot);
+ if(idx>-1)arr.splice(idx,1);
+ spot.day=firstOther.id;spot.color=firstOther.color;
+ let insertAt=arr.length;
+ for(let i=0;i<arr.length;i++){if(arr[i].day===firstOther.id)insertAt=i+1;}
+ arr.splice(insertAt,0,spot);
+ renumberSpots();
+}
+function planReorder(from,to){
  if(from===to)return;
- const day=editSpot.value.day;
+ const day=planDay.value;
  const inDay=spots.value.filter(s=>s.day===day);
- const others=spots.value.filter(s=>s.day!==day);
  const [moved]=inDay.splice(from,1);
  inDay.splice(to,0,moved);
- const result=[];
- let di=0;
+ const result=[];let di=0;
  for(const s of spots.value){
   if(s.day===day){result.push(inDay[di++]);}
   else{result.push(s);}
  }
  spots.value=result;
  renumberSpots();
- saveSpots();
 }
-function edDragStart(i){dragIdx.value=i;}
-function edDragOver(i){overIdx.value=i;}
-function edDrop(i){reorderSpot(dragIdx.value,i);dragIdx.value=null;overIdx.value=null;}
-function edDragEnd(){dragIdx.value=null;overIdx.value=null;}
-function edTouchStart(i,e){dragIdx.value=i;}
-function edTouchMove(e){
- const touch=e.touches[0];
- const el=orderListRef.value;if(!el)return;
- const items=el.querySelectorAll('.order-item');
- for(let i=0;i<items.length;i++){
-  const r=items[i].getBoundingClientRect();
-  if(touch.clientY>=r.top&&touch.clientY<=r.bottom){overIdx.value=i;break;}
+function planDragStart(i){dragIdx.value=i;}
+function planDragOver(i){overIdx.value=i;}
+function planDrop(i){planReorder(dragIdx.value,i);dragIdx.value=null;overIdx.value=null;}
+function planDragEnd(){dragIdx.value=null;overIdx.value=null;}
+function openDriveQuery(spot){
+ const allSpots=spots.value;
+ const idx=allSpots.findIndex(s=>s.id===spot.id);
+ const lastDayId=days.value.length?days.value[days.value.length-1].id:null;
+ const isLastSpotOfLastDay=lastDayId&&spot.day===lastDayId&&!allSpots.slice(idx+1).some(s=>s.day===lastDayId);
+ let origin='',dest='';
+ if(isLastSpotOfLastDay){
+  origin=(spot.en||spot.name)+', Iceland';
+  dest='Keflavik International Airport, Iceland';
+ }else if(idx===0){
+  origin='Keflavik International Airport, Iceland';
+  dest=(spot.en||spot.name)+', Iceland';
+ }else{
+  const prev=allSpots[idx-1];
+  if(prev.day===spot.day){
+   origin=prev.en||prev.name;
+  }else{
+   const prevDay=days.value.find(d=>d.id===prev.day);
+   if(prevDay&&prevDay.htl&&prevDay.htl.addr){
+    origin=prevDay.htl.addr;
+   }else{
+    origin=prev.en||prev.name;
+   }
+  }
+  if(origin&&!origin.includes(','))origin+=', Iceland';
+  dest=(spot.en||spot.name)+', Iceland';
  }
-}
-function edTouchEnd(){
- if(dragIdx.value!==null&&overIdx.value!==null)reorderSpot(dragIdx.value,overIdx.value);
- dragIdx.value=null;overIdx.value=null;
+ let url='https://www.google.com/maps/dir/?api=1&travelmode=driving&destination='+encodeURIComponent(dest);
+ if(origin)url+='&origin='+encodeURIComponent(origin);
+ window.open(url,'_blank');
 }
 onMounted(()=>{
  wrap.value.addEventListener('wheel',onWheel,{passive:false});
  document.addEventListener('keydown',onKey);
  if(svgEl.value) svgEl.value.setAttribute('viewBox',`${cx} ${cy} ${cw} ${ch}`);
+ loadFromLocal();
 });
+watch([spots,days,()=>({...tripMeta})],()=>{if(dataLoaded.value)saveToLocal();},{deep:true});
 onUnmounted(()=>{
  if(wrap.value) wrap.value.removeEventListener('wheel',onWheel);
  document.removeEventListener('keydown',onKey);
  if(rafId) cancelAnimationFrame(rafId);
 });
 
-return{landPath,days,cities,spots,activeDay,showInter,visibleSpots,spotScale,dayRoutes,interDayRoutes,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,carIdx,lbOpen,lbImgs,lbIdx,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave,carPrev,carNext,openLb,lbPrev,lbNext,closeTip,carTs,carTe,lbTs,lbTe,editing,editSpot,daySpots,currentDayLabel,dragIdx,overIdx,orderListRef,openEditor,closeEditor,changeDay,edDragStart,edDragOver,edDrop,edDragEnd,edTouchStart,edTouchMove,edTouchEnd,importData,exportData,exportPdf,dataLoaded,tripMeta,metaEditing,dateRangeDisplay,dayLabel,daySummary};
+return{landPath,days,cities,spots,activeDay,showInter,visibleSpots,spotScale,dayRoutes,interDayRoutes,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,carIdx,lbOpen,lbImgs,lbIdx,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave,carPrev,carNext,openLb,lbPrev,lbNext,closeTip,carTs,carTe,lbTs,lbTe,dragIdx,overIdx,importData,exportData,exportPdf,dataLoaded,tripMeta,metaEditing,dateRangeDisplay,dayLabel,daySummary,planEditing,planDay,planDaySpots,planDayHtl,otherSpots,openPlanEditor,closePlanEditor,addSpotToDay,removeSpotFromDay,planDragStart,planDragOver,planDrop,planDragEnd,openDriveQuery};
 }}).mount('#app');
 </script>
 </body>

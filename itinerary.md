@@ -1,58 +1,63 @@
 # 冰岛环岛自驾攻略
 
-**9.24–10.6 · 1人 · 逆时针环岛 · 38个景点 · 13天**
+**9.24–10.6 · 1人 · 逆时针环岛 · 42个景点 · 13天**
 
 ---
 
-## Day 1 · 9.24 (三) · 雷市初探
+## Day 1 · 9.24 (三) · 抵达休整
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 1 | 哈尔格林姆斯大教堂 | Hallgrímskirkja | 50min (机场出发) | 1-1.5h | 登塔1200ISK |
-| 2 | 彩虹大街 | Skólavörðustígur | 步行2min | 30min | 免费 |
+| 1 | 旧港口漫步 | Old Harbour Walk | 50min (机场→市区) | 1-1.5h | 免费 |
 
-> GPS: 64.1417°N 21.9267°W (教堂)
-> 建议 10:00 到达，上午游客少。周日 11:00 有免费管风琴演奏。
+> 从KEF机场取车开往雷市约50min。抵达后以休整为主，傍晚到港口散步。
+> Bonus超市采购零食，查vedur.is极光预报。
 
 ---
 
-## Day 2 · 9.25 (四) · 黄金圈
+## Day 2 · 9.25 (四) · 雷市探索
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 3 | 辛格韦德利国家公园 | Þingvellir | 45min | 1.5h | 停车750ISK |
-| 4 | 盖歇尔间歇泉 | Geysir | 50min | 1h | 免费 |
-| 5 | 黄金瀑布 | Gullfoss | 10min | 1h | 免费 |
-| 6 | Bruarfoss蓝色瀑布 | Bruarfoss | 15min | 45min | 免费 |
-| 7 | 秘密温泉 | Secret Lagoon | 15min | 1h | 3200ISK |
-| 8 | Kerið火山口湖 | Kerið | 30min | 30min | 400ISK |
+| 2 | 哈尔格林姆斯大教堂 | Hallgrímskirkja | 步行可达 | 1-1.5h | 登塔1200ISK |
+| 3 | 彩虹大街 | Skólavörðustígur | 步行2min | 30min | 免费 |
+| 4 | 太阳航海者 | Sun Voyager / Sólfar | 步行15min | 30min | 免费 |
+| 5 | Harpa音乐厅 | Harpa Concert Hall | 步行5min | 45min | 免费 |
+| 6 | Perlan珍珠楼 | Perlan | 车程5min | 1.5-2h | 观景台免费/展馆4900ISK |
+
+> 建议 09:30 开始，步行游览市中心后驱车前往Perlan。全天无需长距离驾驶。
+
+---
+
+## Day 3 · 9.26 (五) · 黄金圈
+
+| # | 景点 | 英文 | 车程 | 停留 | 费用 |
+|---|------|------|------|------|------|
+| 7 | 辛格韦德利国家公园 | Þingvellir | 45min | 1.5h | 停车750ISK |
+| 8 | 盖歇尔间歇泉 | Geysir | 50min | 1h | 免费 |
+| 9 | 黄金瀑布 | Gullfoss | 10min | 1h | 免费 |
+| 10 | Bruarfoss蓝色瀑布 | Bruarfoss | 15min | 45min | 免费 |
+| 11 | 秘密温泉 | Secret Lagoon | 15min | 1h | 3200ISK |
+| 12 | Kerið火山口湖 | Kerið | 30min | 30min | 400ISK |
 
 > 建议 08:30 出发。秘密温泉需预约。总车程约 2.5h，游玩约 5.75h。
 
 ---
 
-## Day 3 · 9.26 (五) · 南海岸
+## Day 4 · 9.27 (六) · 南海岸·维克
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 9 | 塞里雅兰瀑布 | Seljalandsfoss | 1.5h | 1h | 停车800ISK |
-| 10 | 隐藏温泉泳池 | Seljavallalaug | 15min | 1h | 免费 |
-| 11 | 森林瀑布 | Skógafoss | 25min | 1h | 免费 |
+| 13 | 塞里雅兰瀑布 | Seljalandsfoss | 1.5h (自雷市) | 1h | 停车800ISK |
+| 14 | 隐藏温泉泳池 | Seljavallalaug | 15min | 1h | 免费 |
+| 15 | 森林瀑布 | Skógafoss | 25min | 1h | 免费 |
+| 16 | 飞机残骸 | Sólheimasandur DC-3 | 15min | 1.5h | 停车750ISK |
+| 17 | 迪霍拉里海岬 | Dyrhólaey | 20min | 30min | 免费 |
+| 18 | 黑沙滩 | Reynisfjara | 30min | 1-1.5h | 免费 |
+| 19 | 维克红教堂 | Víkurkirkja | 12min | 20min | 免费 |
 
-> 建议 08:00 出发。塞里雅兰瀑布可从瀑布后方穿过（穿防水衣）。森林瀑布 370 级台阶登顶可俯瞰。
-
----
-
-## Day 4 · 9.27 (六) · 维克
-
-| # | 景点 | 英文 | 车程 | 停留 | 费用 |
-|---|------|------|------|------|------|
-| 12 | 飞机残骸 | Sólheimasandur DC-3 | 15min | 1.5h | 停车750ISK |
-| 13 | 迪霍拉里海岬 | Dyrhólaey | 20min | 30min | 免费 |
-| 14 | 黑沙滩 | Reynisfjara | 30min | 1-1.5h | 免费 |
-| 15 | 维克红教堂 | Víkurkirkja | 12min | 20min | 免费 |
-
-> 飞机残骸步行单程 3.5km（45min），接驳车 2500ISK 往返。黑沙滩注意安全，切勿背对海浪。
+> 今天行程较紧凑，建议 07:30 出发。飞机残骸建议搭接驳车（2500ISK往返）节省时间。
+> 隐藏温泉时间紧可跳过。黑沙滩注意安全，切勿背对海浪。
 
 ---
 
@@ -60,9 +65,9 @@
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 16 | Fjaðrárgljúfur峡谷 | Fjaðrárgljúfur | 50min | 45min | 免费 |
-| 17 | 冰川徒步 | Skaftafell | 1h | 2.5-3h | 12000-15000ISK/人 |
-| 18 | 黑瀑布 | Svartifoss | Skaftafell内 | 1.5h | 含停车费 |
+| 20 | Fjaðrárgljúfur峡谷 | Fjaðrárgljúfur | 50min | 45min | 免费 |
+| 21 | 冰川徒步 | Skaftafell | 1h | 2.5-3h | 12000-15000ISK/人 |
+| 22 | 黑瀑布 | Svartifoss | Skaftafell内 | 1.5h | 含停车费 |
 
 > 建议 07:30 出发。冰川徒步需提前预约。Svartifoss 从游客中心往返约 5.5km。
 
@@ -72,9 +77,9 @@
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 19 | 冰河湖 | Jökulsárlón | 1h | 1-1.5h | 免费 |
-| 20 | 钻石沙滩 | Diamond Beach | 步行3min | 45min | 免费 |
-| 21 | 蝙蝠山 | Vestrahorn/Stokksnes | 15min (自Höfn) | 1h | 门票900ISK |
+| 23 | 冰河湖 | Jökulsárlón | 1h | 1-1.5h | 免费 |
+| 24 | 钻石沙滩 | Diamond Beach | 步行3min | 45min | 免费 |
+| 25 | 蝙蝠山 | Vestrahorn/Stokksnes | 15min (自Höfn) | 1h | 门票900ISK |
 
 > 钻石沙滩注意安全，勿靠近海浪。蝙蝠山日出/日落拍摄最佳。
 
@@ -84,8 +89,8 @@
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 22 | 玄武岩峡谷 | Stuðlagil Canyon | 1h (自Egilsstaðir) | 2h | 免费 |
-| 23 | 蓝色教堂小镇 | Seyðisfjörður | 30min (自Egilsstaðir) | 45min | 免费 |
+| 26 | 玄武岩峡谷 | Stuðlagil Canyon | 1h (自Egilsstaðir) | 2h | 免费 |
+| 27 | 蓝色教堂小镇 | Seyðisfjörður | 30min (自Egilsstaðir) | 45min | 免费 |
 
 > 东部路段较偏远，提前加满油。Stuðlagil 需徒步约 30min 到达峡谷底部。10月山路注意安全。
 
@@ -95,8 +100,8 @@
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 24 | 黛提瀑布 | Dettifoss | 45min | 1h | 免费 |
-| 25 | 米湖区域 | Mývatn | 30min | 4-5h | Námaskarð免费/温泉5500ISK |
+| 28 | 黛提瀑布 | Dettifoss | 45min | 1h | 免费 |
+| 29 | 米湖区域 | Mývatn | 30min | 4-5h | Námaskarð免费/温泉5500ISK |
 
 > 建议 08:00 出发。走 862 号公路（东岸），864 号公路 10 月可能封闭。米湖建议游览顺序：Námaskarð → Dimmuborgir → Grjótagjá → Mývatn Nature Baths（傍晚泡温泉等极光）。
 
@@ -106,9 +111,9 @@
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 26 | 胡萨维克观鲸 | Húsavík | 50min (自米湖) | 3h | 约11000ISK/人 |
-| 27 | 众神瀑布 | Goðafoss | 35min | 45min | 免费 |
-| 28 | 犀牛石 | Hvítserkur | 2.5h (自阿克雷里) | 45min | 免费 |
+| 30 | 胡萨维克观鲸 | Húsavík | 50min (自米湖) | 3h | 约11000ISK/人 |
+| 31 | 众神瀑布 | Goðafoss | 35min | 45min | 免费 |
+| 32 | 犀牛石 | Hvítserkur | 2.5h (自阿克雷里) | 45min | 免费 |
 
 > 观鲸需预约，通常上午出发。众神瀑布东岸停车场更方便，西岸人少。犀牛石查潮汐表，退潮时更壮观。
 
@@ -118,9 +123,9 @@
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 29 | 斯蒂基斯霍尔米 | Stykkishólmur | 2h (自雷市方向) | 1h | 免费 |
-| 30 | 草帽山 | Kirkjufell | 40min | 1-1.5h | 免费 |
-| 31 | Ingjaldshólskirkja红房子 | Ingjaldshólskirkja | 25min | 20min | 免费 |
+| 33 | 斯蒂基斯霍尔米 | Stykkishólmur | 2h (自雷市方向) | 1h | 免费 |
+| 34 | 草帽山 | Kirkjufell | 40min | 1-1.5h | 免费 |
+| 35 | Ingjaldshólskirkja红房子 | Ingjaldshólskirkja | 25min | 20min | 免费 |
 
 > 建议 07:30 出发。草帽山配合 Kirkjufellsfoss 瀑布拍摄经典构图。
 
@@ -130,10 +135,10 @@
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 32 | Búðir黑教堂 | Búðakirkja | 40min | 30min | 免费 |
-| 33 | Ytri Tunga海豹沙滩 | Ytri Tunga | 16min | 30-45min | 免费 |
-| 34 | Arnarstapi海岸 | Arnarstapi | 20min | 1h | 免费 |
-| 35 | 黑珍珠沙滩 | Djúpalónssandur | 20min | 45min | 免费 |
+| 36 | Búðir黑教堂 | Búðakirkja | 40min | 30min | 免费 |
+| 37 | Ytri Tunga海豹沙滩 | Ytri Tunga | 16min | 30-45min | 免费 |
+| 38 | Arnarstapi海岸 | Arnarstapi | 20min | 1h | 免费 |
+| 39 | 黑珍珠沙滩 | Djúpalónssandur | 20min | 45min | 免费 |
 
 > 沿斯奈山半岛南侧环行，各景点紧凑。Arnarstapi 有海蚀洞和石桥。Djúpalónssandur 有维京力量石。
 
@@ -143,8 +148,8 @@
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 36 | 温泉河徒步 | Reykjadalur | 1.5h | 2h | 免费 |
-| 37 | 法格拉达尔火山 | Fagradalsfjall | 20min (自KEF) | 3-4h | 免费 |
+| 40 | 温泉河徒步 | Reykjadalur | 1.5h | 2h | 免费 |
+| 41 | 法格拉达尔火山 | Fagradalsfjall | 20min (自KEF) | 3-4h | 免费 |
 
 > Reykjadalur 往返约 7km 徒步，终点天然温泉河可泡澡。Fagradalsfjall 2021-2023 喷发的新火山，地面可能仍有热气。
 
@@ -154,7 +159,7 @@
 
 | # | 景点 | 英文 | 车程 | 停留 | 费用 |
 |---|------|------|------|------|------|
-| 38 | 蓝湖温泉 | Blue Lagoon | 50min | 2h | Comfort 12990ISK起 |
+| 42 | 蓝湖温泉 | Blue Lagoon | 50min | 2h | Comfort 12990ISK起 |
 
 > 必须提前 1-2 周网上预约。距机场仅 20min，适合离境当天。进入前须裸体淋浴，涂护发素保护头发。
 
@@ -176,7 +181,7 @@
 
 ## 需预约项目
 
-- [ ] Secret Lagoon 秘密温泉 (Day 2)
+- [ ] Secret Lagoon 秘密温泉 (Day 3)
 - [ ] Skaftafell 冰川徒步 (Day 5)
 - [ ] Húsavík 观鲸 (Day 9)
 - [ ] Blue Lagoon 蓝湖温泉 (Day 13)
