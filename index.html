@@ -36,6 +36,7 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .spot.active .dot{r:5.5}
 .spot .num{fill:#fff;font-size:4.5px;font-weight:700;pointer-events:none}
 .spot .lbl{font-size:5px;font-weight:600;opacity:0.7;pointer-events:none;fill:#1d1d1f}
+.hotel-lbl{font-size:4.5px;font-weight:500;opacity:0.8;pointer-events:none}
 
 .controls{position:absolute;bottom:20px;right:20px;display:flex;flex-direction:column;align-items:flex-end;gap:4px;z-index:30}
 .controls-left{position:absolute;bottom:20px;left:20px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;z-index:30}
@@ -192,6 +193,9 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
 .htl-row{display:flex;align-items:center;gap:10px}
 .htl-row label{width:40px;font-size:0.8rem;color:#666;flex-shrink:0}
 .htl-row .meta-input{flex:1}
+.htl-search-btn{padding:4px 10px;font-size:0.75rem;border:1px solid #4a90d9;background:#4a90d9;color:#fff;border-radius:4px;cursor:pointer;white-space:nowrap}
+.htl-search-btn:hover{background:#357abd}
+.htl-search-btn:disabled{opacity:0.6;cursor:not-allowed}
 @media(max-width:768px){
 .plan-header{padding:12px 16px}
 .plan-tabs{padding:10px 16px}
@@ -247,11 +251,16 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
    <stop offset="100%" :stop-color="l.c2"/>
   </linearGradient>
  </defs>
- <polyline v-for="r in dayRoutes" :key="r.day" class="day-route" :points="r.pts" :stroke="r.color"/>
- <line v-for="l in interDayRoutes" :key="'l'+l.id" class="inter-route" :x1="l.x1" :y1="l.y1" :x2="l.x2" :y2="l.y2" :stroke="'url(#grad-'+l.id+')'"/>
+ <polyline v-for="r in dayRoutes" v-show="!showHotelsOnly" :key="r.day" class="day-route" :points="r.pts" :stroke="r.color"/>
+ <line v-for="l in interDayRoutes" v-show="!showHotelsOnly" :key="'l'+l.id" class="inter-route" :x1="l.x1" :y1="l.y1" :x2="l.x2" :y2="l.y2" :stroke="'url(#grad-'+l.id+')'"/>
  <g v-for="c in cities" :key="c.n" :transform="'translate('+c.x+','+c.y+') scale('+spotScale+')'">
   <circle class="city-dot" cx="0" cy="0" r="2"/>
   <text class="city-label" :x="c.ox" :y="c.oy">{{c.n}}</text>
+ </g>
+ <g v-for="h in hotelMarkers" :key="h.id" class="hotel-marker"
+    :transform="'translate('+h.x+','+h.y+') scale('+spotScale+')'">
+  <rect x="-5" y="-5" width="10" height="10" rx="2" :fill="h.color" fill-opacity="0.85" stroke="#fff" stroke-width="1"/>
+  <text class="hotel-lbl" x="7" y="1" :fill="h.color">{{h.date}} {{h.name}}</text>
  </g>
  <g v-for="s in visibleSpots" :key="s.id" class="spot" :class="{active:hId===s.id}"
     :transform="'translate('+s.x+','+s.y+') scale('+spotScale+')'"
@@ -276,6 +285,7 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
  <button class="ctrl-btn" @click="reset()" style="font-size:0.65rem">&circlearrowleft;</button>
  <div class="zoom-pct">{{Math.round(1000/vw*100)}}%</div>
  <label class="ctrl-chk"><input type="checkbox" v-model="showInter"/><span>跨天连线</span></label>
+ <label class="ctrl-chk"><input type="checkbox" v-model="showHotelsOnly"/><span>只看住宿</span></label>
 </div>
 </div>
 
@@ -412,8 +422,9 @@ html,body{height:100%;overflow:hidden;background:#f5f5f7;font-family:-apple-syst
   <div class="plan-section">
    <div class="plan-section-title">住宿信息</div>
    <div class="htl-form" v-if="planDayHtl">
-    <div class="htl-row"><label>名称</label><input class="meta-input" v-model="planDayHtl.name" placeholder="酒店名称"/></div>
+    <div class="htl-row"><label>名称</label><input class="meta-input" v-model="planDayHtl.name" placeholder="酒店名称"/><button class="htl-search-btn" @click="searchHotelGps" :disabled="gpsSearching">{{gpsSearching?'搜索中…':'搜索GPS'}}</button></div>
     <div class="htl-row"><label>地址</label><input class="meta-input" v-model="planDayHtl.addr" placeholder="酒店地址"/></div>
+    <div class="htl-row"><label>GPS</label><input class="meta-input" v-model="planDayHtl.gps" placeholder="64.15°N 21.93°W"/></div>
     <div class="htl-row"><label>电话</label><input class="meta-input" v-model="planDayHtl.tel" placeholder="联系电话"/></div>
     <div class="htl-row"><label>链接</label><input class="meta-input" v-model="planDayHtl.url" placeholder="预订链接"/></div>
    </div>
@@ -494,7 +505,7 @@ function importData(){
      if(data.days){
       days.value=data.days.map(d=>{
        const name=d.name||(d.label?((d.label.match(/^\d+\.\d+\s+(.+)$/)||[])[1]||d.label):('Day '+d.id));
-       return{id:d.id,color:d.color,name,htl:d.htl||{name:'',addr:'',tel:'',url:''}};
+       return{id:d.id,color:d.color,name,htl:d.htl||{name:'',addr:'',tel:'',url:'',gps:''}};
       });
      }
      if(data.meta){
@@ -539,7 +550,7 @@ function loadFromLocal(){
   if(data.days){
    days.value=data.days.map(d=>{
     const name=d.name||(d.label?((d.label.match(/^\d+\.\d+\s+(.+)$/)||[])[1]||d.label):('Day '+d.id));
-    return{id:d.id,color:d.color,name,htl:d.htl||{name:'',addr:'',tel:'',url:''}};
+    return{id:d.id,color:d.color,name,htl:d.htl||{name:'',addr:'',tel:'',url:'',gps:''}};
    });
   }
   if(data.meta){
@@ -612,7 +623,7 @@ td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}
   let transport='Self-drive<br>自驾';
   if(isFirst(idx))transport='Flight + Self-drive<br>航班+自驾';
   if(isLast(idx))transport='Self-drive + Flight<br>自驾+航班';
-  const htl=d.htl||{name:'',addr:'',tel:'',url:''};
+  const htl=d.htl||{name:'',addr:'',tel:'',url:'',gps:''};
   let htlHtml='—';
   if(htl.name){
    htlHtml=`<div class="htl-name">${htl.name}</div>`;
@@ -636,6 +647,7 @@ td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}
 
 const activeDay=ref(null);
 const showInter=ref(true);
+const showHotelsOnly=ref(false);
 const hId=ref(null);
 const tip=ref(null);
 const tpos=ref({});
@@ -693,10 +705,38 @@ function tick(){
 function startAnim(){if(!rafId)rafId=requestAnimationFrame(tick);}
 
 const visibleSpots=computed(()=>{
+ if(showHotelsOnly.value) return [];
  if(!activeDay.value) return spots.value;
  return spots.value.filter(s=>s.day===activeDay.value);
 });
 const spotScale=computed(()=>vw.value/1000*(isMobile?4:2));
+function parseGps(g){
+ if(!g) return null;
+ const m=g.match(/([\d.]+)°N\s*([\d.]+)°W/);
+ if(!m) return null;
+ return {lat:parseFloat(m[1]),lon:-parseFloat(m[2])};
+}
+function gpsToSvg(lat,lon){
+ return {x:Math.round(187+(lon+22.62)*86.4),y:Math.round(562-(lat-63.42)*171.2)};
+}
+const hotelMarkers=computed(()=>{
+ const markers=[];
+ for(const d of days.value){
+  if(!d.htl||!d.htl.gps) continue;
+  const p=parseGps(d.htl.gps);
+  if(!p) continue;
+  const {x,y}=gpsToSvg(p.lat,p.lon);
+  let dateStr='';
+  if(tripMeta.startDate){
+   const sd=new Date(tripMeta.startDate);
+   sd.setDate(sd.getDate()+Number(d.id)-1);
+   dateStr=(sd.getMonth()+1)+'.'+sd.getDate();
+  }
+  markers.push({id:'h'+d.id,x,y,color:d.color,name:d.htl.name,dayId:d.id,date:dateStr});
+ }
+ if(activeDay.value) return markers.filter(m=>m.dayId===activeDay.value);
+ return markers;
+});
 const dayRoutes=computed(()=>{
  const dayMap={};
  spots.value.forEach(s=>{
@@ -890,7 +930,7 @@ const planDaySpots=computed(()=>{
 });
 const planDayHtl=computed(()=>{
  const d=days.value.find(d=>d.id===planDay.value);
- return d?d.htl:{name:'',addr:'',tel:'',url:''};
+ return d?d.htl:{name:'',addr:'',tel:'',url:'',gps:''};
 });
 const planDayRegion=computed(()=>{
  const dSpots=spots.value.filter(s=>s.day===planDay.value);
@@ -920,6 +960,25 @@ function openHotelSite(site){
   case'trip':url='https://www.trip.com/hotels/list?city='+enc+'&checkin='+checkin.replace(/-/g,'/')+'&checkout='+checkout.replace(/-/g,'/');break;
  }
  window.open(url,'_blank');
+}
+const gpsSearching=ref(false);
+async function searchHotelGps(){
+ const name=planDayHtl.value&&planDayHtl.value.name;
+ if(!name){alert('请先输入酒店名称');return;}
+ gpsSearching.value=true;
+ try{
+  const q=encodeURIComponent(name+' Iceland');
+  const resp=await fetch('https://nominatim.openstreetmap.org/search?q='+q+'&format=json&limit=1',{headers:{'Accept-Language':'en'}});
+  const data=await resp.json();
+  if(!data||!data.length){alert('未找到该酒店的GPS信息，请尝试使用英文名称');return;}
+  const lat=parseFloat(data[0].lat).toFixed(4);
+  const lon=Math.abs(parseFloat(data[0].lon)).toFixed(4);
+  planDayHtl.value.gps=lat+'°N '+lon+'°W';
+  if(data[0].display_name&&!planDayHtl.value.addr){
+   planDayHtl.value.addr=data[0].display_name.split(',').slice(0,3).join(',');
+  }
+ }catch(e){alert('搜索失败: '+e.message);}
+ finally{gpsSearching.value=false;}
 }
 function addSpotToDay(spotId){
  const s=spots.value.find(x=>x.id===Number(spotId));if(!s)return;
@@ -1013,7 +1072,7 @@ onUnmounted(()=>{
  if(rafId) cancelAnimationFrame(rafId);
 });
 
-return{landPath,days,cities,spots,activeDay,showInter,visibleSpots,spotScale,dayRoutes,interDayRoutes,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,carIdx,lbOpen,lbImgs,lbIdx,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave,carPrev,carNext,openLb,lbPrev,lbNext,closeTip,carTs,carTe,lbTs,lbTe,dragIdx,overIdx,importData,exportData,exportPdf,dataLoaded,tripMeta,metaEditing,dateRangeDisplay,dayLabel,daySummary,planEditing,planDay,planDaySpots,planDayHtl,planDayRegion,otherSpots,openPlanEditor,closePlanEditor,addSpotToDay,removeSpotFromDay,planDragStart,planDragOver,planDrop,planDragEnd,openDriveQuery,openHotelSite,useBaidu};
+return{landPath,days,cities,spots,activeDay,showInter,showHotelsOnly,visibleSpots,spotScale,hotelMarkers,dayRoutes,interDayRoutes,vb,vx,vy,vw,vh,wrap,svgEl,hId,tip,tpos,tHov,carIdx,lbOpen,lbImgs,lbIdx,zm,reset,onWheel,onDown,onMove,onUp,enter,leave,tLeave,carPrev,carNext,openLb,lbPrev,lbNext,closeTip,carTs,carTe,lbTs,lbTe,dragIdx,overIdx,importData,exportData,exportPdf,dataLoaded,tripMeta,metaEditing,dateRangeDisplay,dayLabel,daySummary,planEditing,planDay,planDaySpots,planDayHtl,planDayRegion,otherSpots,openPlanEditor,closePlanEditor,addSpotToDay,removeSpotFromDay,planDragStart,planDragOver,planDrop,planDragEnd,openDriveQuery,openHotelSite,gpsSearching,searchHotelGps,useBaidu};
 }}).mount('#app');
 </script>
 </body>
