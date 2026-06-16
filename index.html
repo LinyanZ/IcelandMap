@@ -968,16 +968,30 @@ async function searchHotelGps(){
  gpsSearching.value=true;
  try{
   const q=encodeURIComponent(name+' Iceland');
-  const resp=await fetch('https://nominatim.openstreetmap.org/search?q='+q+'&format=json&limit=1',{headers:{'Accept-Language':'en'}});
+  const url='https://nominatim.openstreetmap.org/search?q='+q+'&format=json&limit=1&accept-language=en';
+  const resp=await fetch(url);
+  if(!resp.ok) throw new Error('HTTP '+resp.status);
   const data=await resp.json();
-  if(!data||!data.length){alert('未找到该酒店的GPS信息，请尝试使用英文名称');return;}
+  if(!data||!data.length){alert('未找到该酒店的GPS信息，请尝试使用英文全称');return;}
   const lat=parseFloat(data[0].lat).toFixed(4);
   const lon=Math.abs(parseFloat(data[0].lon)).toFixed(4);
   planDayHtl.value.gps=lat+'°N '+lon+'°W';
   if(data[0].display_name&&!planDayHtl.value.addr){
    planDayHtl.value.addr=data[0].display_name.split(',').slice(0,3).join(',');
   }
- }catch(e){alert('搜索失败: '+e.message);}
+ }catch(e){
+  if(e.message==='Failed to fetch'||e.message.includes('NetworkError')){
+   const manual=prompt('自动搜索失败（需要通过本地服务器打开页面）。\n请手动输入GPS坐标，格式: 纬度,经度\n例如: 64.9400,-23.2600');
+   if(manual){
+    const parts=manual.split(',');
+    if(parts.length===2){
+     const lat=parseFloat(parts[0]).toFixed(4);
+     const lon=Math.abs(parseFloat(parts[1])).toFixed(4);
+     planDayHtl.value.gps=lat+'°N '+lon+'°W';
+    }else{alert('格式错误，请使用: 纬度,经度');}
+   }
+  }else{alert('搜索失败: '+e.message);}
+ }
  finally{gpsSearching.value=false;}
 }
 function addSpotToDay(spotId){
