@@ -87,10 +87,10 @@
       "color": "#c4561a",
       "name": "北部·黛提",
       "htl": {
-        "name": "Fosshótel Mývatn",
-        "addr": "Mývatn, Iceland",
-        "gps": "65.6350°N 16.9900°W",
-        "url": ""
+        "name": "Saeluhus Apartments & Houses",
+        "addr": "Sunnutröð 2, Akureyri, Iceland",
+        "gps": "65.6678°N 18.0968°W",
+        "url": "https://hotels.ctrip.com/hotels/detail/?cityId=6653&hotelId=9213879"
       }
     },
     {
@@ -2252,6 +2252,51 @@
         "单程机票约15000-18000 ISK ($100-120)",
         "10月日落约18:00，注意掌握时间",
         "从阿克雷里出发前加满油"
+      ]
+    },
+    {
+      "id": 43,
+      "x": 578,
+      "y": 175,
+      "day": "8",
+      "color": "#c4561a",
+      "name": "森林温泉",
+      "en": "Forest Lagoon",
+      "sn": "Skógarböðin",
+      "sl": false,
+      "gps": "65.6830°N 18.0940°W",
+      "fee": "约6990 ISK",
+      "season": "全年",
+      "history": "Forest Lagoon（Skógarböðin）于2022年开业，是阿克雷里附近的高端地热温泉。坐落在Vaðlaheiði山坡的松树林中，俯瞰Eyjafjörður峡湾，被誉为冰岛最美温泉之一。设有无边际泳池、冷水池和桑拿，设计融入自然山林环境。",
+      "drv": "众神瀑布→30min",
+      "dur": "1.5-2h",
+      "bk": true,
+      "wrn": false,
+      "route": "从众神瀑布沿1号公路西行至阿克雷里方向，转入Vaðlaheiðarvegur山路约5min即到。",
+      "imgs": [],
+      "hl": [
+        "松树林中的无边际地热温泉",
+        "俯瞰Eyjafjörður峡湾的绝美景观",
+        "2022年新开业，设施现代",
+        "含桑拿和冷水池，北欧式冷热交替"
+      ],
+      "ph": [
+        "无边际池边缘：人物+峡湾远景，傍晚光线最佳",
+        "雾气升腾+松树林背景"
+      ],
+      "insider": [
+        "建议提前网上预约，旺季常满",
+        "傍晚时分泡温泉可能遇到极光",
+        "自带毛巾可省租金，泳衣必备",
+        "比蓝湖人少很多，体验更安静"
+      ],
+      "rest": [],
+      "htl": [],
+      "notes": [
+        "需提前预约",
+        "约6990 ISK/人",
+        "含毛巾和饮品",
+        "10月傍晚有极光概率"
       ]
     },
     {
