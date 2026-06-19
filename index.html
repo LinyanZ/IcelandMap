@@ -598,14 +598,16 @@ td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}
 .htl-name{font-weight:500}
 .htl-addr{color:#555;font-size:0.72rem}
 .htl-tel{color:#555;font-size:0.72rem}
-.transport{font-size:0.72rem;color:#555}
-.region-en{font-size:0.68rem;color:#555;font-weight:400}
+.transport{font-size:0.72rem;color:#1d1d1f}
+.transport-en{color:#888;font-size:0.68rem}
+.region-en{font-size:0.68rem;color:#888;font-weight:400}
+.spot-en{font-size:0.68rem;color:#888;margin-left:4px}
 .footer{margin-top:16px;font-size:0.75rem;color:#666;line-height:1.8}
 @media print{body{padding:15px 20px}table{font-size:0.72rem}@page{margin:12mm 15mm}}
 </style></head><body>
 <h1>Travel Itinerary 行程单</h1>
 <h2>Iceland Self-drive Trip 冰岛自驾环岛 · ${dateRangeDisplay.value}</h2>
-<table><thead><tr><th style="width:11%">Date<br>日期</th><th style="width:12%">City/Region<br>城市</th><th style="width:12%">Transport<br>交通</th><th style="width:32%">Activities<br>活动</th><th style="width:33%">Accommodation<br>住宿</th></tr></thead><tbody>`;
+<table><thead><tr><th style="width:11%">Date<br>日期</th><th style="width:12%">City/Region<br>城市</th><th style="width:32%">Activities<br>活动</th><th style="width:12%">Transport<br>交通</th><th style="width:33%">Accommodation<br>住宿</th></tr></thead><tbody>`;
  dayOrder.forEach((dayId,idx)=>{
   const d=days.value.find(x=>x.id===dayId);
   if(!d)return;
@@ -620,11 +622,11 @@ td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}
   const spotLines=dSpots.map(sp=>{
    const cn=sp.sn||sp.name;
    const en=sp.en||'';
-   return en?`${cn} / ${en}`:cn;
+   return en?`${cn} <span class="spot-en">${en}</span>`:cn;
   }).join('<br>');
-  let transport='Self-drive<br>自驾';
-  if(isFirst(idx))transport='Flight + Self-drive<br>航班+自驾';
-  if(isLast(idx))transport='Self-drive + Flight<br>自驾+航班';
+  let transport='自驾<br><span class="transport-en">Self-drive</span>';
+  if(isFirst(idx))transport='航班+自驾<br><span class="transport-en">Flight + Self-drive</span>';
+  if(isLast(idx))transport='自驾+航班<br><span class="transport-en">Self-drive + Flight</span>';
   const htl=d.htl||{name:'',addr:'',tel:'',url:'',gps:''};
   let htlHtml='—';
   if(htl.name){
@@ -632,7 +634,7 @@ td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}
    if(htl.addr)htlHtml+=`<div class="htl-addr">${htl.addr}</div>`;
    if(htl.tel)htlHtml+=`<div class="htl-tel">Tel: ${htl.tel}</div>`;
   }
-  html+=`<tr><td class="date-col">${dateStr}<br>(${wday})</td><td>${region}<br><span class="region-en">${regionEn}</span></td><td class="transport">${transport}</td><td class="spots-col">${spotLines||'—'}</td><td>${htlHtml}</td></tr>`;
+  html+=`<tr><td class="date-col">${dateStr}<br>(${wday})</td><td>${region}<br><span class="region-en">${regionEn}</span></td><td class="spots-col">${spotLines||'—'}</td><td class="transport">${transport}</td><td>${htlHtml}</td></tr>`;
  });
  html+=`</tbody></table>
 <div class="footer">
