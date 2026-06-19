@@ -9,6 +9,7 @@
       "id": "1",
       "color": "#6366f1",
       "name": "抵达休整",
+      "en": "Arrival · Reykjavík",
       "htl": {
         "name": "Alva Hotel",
         "addr": "Reykjavik, Iceland",
@@ -20,6 +21,7 @@
       "id": "2",
       "color": "#d4820f",
       "name": "雷克雅未克·南下",
+      "en": "Reykjavík · South Coast",
       "htl": {
         "name": "Hotel Loa",
         "addr": "Hella, Iceland",
@@ -31,6 +33,7 @@
       "id": "3",
       "color": "#34a06c",
       "name": "维克·黑沙滩",
+      "en": "Vík · Black Sand Beach",
       "htl": {
         "name": "Hotel Laki",
         "addr": "Vík area, Iceland",
@@ -42,6 +45,7 @@
       "id": "4",
       "color": "#10b981",
       "name": "冰川徒步",
+      "en": "Glacier Hike · Skaftafell",
       "htl": {
         "name": "Fosshotel Nupar",
         "addr": "Núpur, Iceland",
@@ -53,6 +57,7 @@
       "id": "5",
       "color": "#0077b6",
       "name": "冰河湖·东部",
+      "en": "Jökulsárlón · East",
       "htl": {
         "name": "Hotel Smyrlabjörg",
         "addr": "Höfn, Iceland",
@@ -64,10 +69,12 @@
       "id": "6",
       "color": "#0ea5e9",
       "name": "东峡湾",
+      "en": "East Fjords · Egilsstaðir",
       "htl": {
-        "name": "Lake Hotel Egilsstaðir",
-        "addr": "Egilsstaðir, Iceland",
-        "gps": "65.2200°N 14.5200°W",
+        "name": "Hótel Valaskjálf",
+        "addr": "Skógargerði 1, 700 Egilsstaðir, Iceland",
+        "gps": "65.2640°N 14.3950°W",
+        "tel": "+354 471 1500",
         "url": ""
       }
     },
@@ -75,6 +82,7 @@
       "id": "7",
       "color": "#7c3aed",
       "name": "米湖",
+      "en": "Lake Mývatn",
       "htl": {
         "name": "Hótel Laxá",
         "addr": "Mývatn, Iceland",
@@ -86,6 +94,7 @@
       "id": "8",
       "color": "#c4561a",
       "name": "北部·黛提",
+      "en": "North · Dettifoss · Akureyri",
       "htl": {
         "name": "Saeluhus Apartments & Houses",
         "addr": "Sunnutröð 2, Akureyri, Iceland",
@@ -97,10 +106,12 @@
       "id": "9",
       "color": "#e11d48",
       "name": "西行",
+      "en": "Westbound · Grundarfjörður",
       "htl": {
-        "name": "Hotel Hamar",
-        "addr": "Borgarnes, Iceland",
-        "gps": "64.5370°N 21.9210°W",
+        "name": "Kirkjufell Guesthouse and Apartments",
+        "addr": "Nesvegur 4, 350 Grundarfjörður, Iceland",
+        "gps": "64.9270°N 23.2500°W",
+        "tel": "",
         "url": ""
       }
     },
@@ -108,6 +119,7 @@
       "id": "10",
       "color": "#4a8c2a",
       "name": "斯奈山半岛",
+      "en": "Snæfellsnes Peninsula",
       "htl": {
         "name": "Grand Hótel Reykjavík",
         "addr": "Sigtún 38, Reykjavik",
@@ -119,6 +131,7 @@
       "id": "11",
       "color": "#15803d",
       "name": "黄金圈",
+      "en": "Golden Circle",
       "htl": {
         "name": "Hotel Geysir",
         "addr": "Geysir, Iceland",
@@ -130,6 +143,7 @@
       "id": "12",
       "color": "#8b5cf6",
       "name": "自由活动",
+      "en": "Free Day · Reykjavík",
       "htl": {
         "name": "Grand Hótel Reykjavík",
         "addr": "Sigtún 38, Reykjavik",
@@ -141,6 +155,7 @@
       "id": "13",
       "color": "#ec4899",
       "name": "返程",
+      "en": "Departure · KEF",
       "htl": {
         "name": "",
         "addr": "",
@@ -2355,8 +2370,8 @@
       "id": 29,
       "x": 178,
       "y": 279,
-      "day": "10",
-      "color": "#4a8c2a",
+      "day": "9",
+      "color": "#e11d48",
       "name": "斯蒂基斯霍尔米",
       "en": "Stykkishólmur",
       "sn": "",
@@ -2881,8 +2896,8 @@
       "id": 37,
       "x": 210,
       "y": 478,
-      "day": "13",
-      "color": "#ec4899",
+      "day": "12",
+      "color": "#8b5cf6",
       "name": "法格拉达尔火山",
       "en": "Fagradalsfjall",
       "sn": "",
@@ -2936,8 +2951,8 @@
       "id": 38,
       "x": 203,
       "y": 483,
-      "day": "13",
-      "color": "#ec4899",
+      "day": "12",
+      "color": "#8b5cf6",
       "name": "蓝湖温泉",
       "en": "Blue Lagoon",
       "sn": "Blue Lagoon",

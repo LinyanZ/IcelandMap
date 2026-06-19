@@ -505,7 +505,7 @@ function importData(){
      if(data.days){
       days.value=data.days.map(d=>{
        const name=d.name||(d.label?((d.label.match(/^\d+\.\d+\s+(.+)$/)||[])[1]||d.label):('Day '+d.id));
-       return{id:d.id,color:d.color,name,htl:d.htl||{name:'',addr:'',tel:'',url:'',gps:''}};
+       return{id:d.id,color:d.color,name,en:d.en||'',htl:d.htl||{name:'',addr:'',tel:'',url:'',gps:''}};
       });
      }
      if(data.meta){
@@ -550,7 +550,7 @@ function loadFromLocal(){
   if(data.days){
    days.value=data.days.map(d=>{
     const name=d.name||(d.label?((d.label.match(/^\d+\.\d+\s+(.+)$/)||[])[1]||d.label):('Day '+d.id));
-    return{id:d.id,color:d.color,name,htl:d.htl||{name:'',addr:'',tel:'',url:'',gps:''}};
+    return{id:d.id,color:d.color,name,en:d.en||'',htl:d.htl||{name:'',addr:'',tel:'',url:'',gps:''}};
    });
   }
   if(data.meta){
@@ -599,6 +599,7 @@ td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}
 .htl-addr{color:#555;font-size:0.72rem}
 .htl-tel{color:#555;font-size:0.72rem}
 .transport{font-size:0.72rem;color:#555}
+.region-en{font-size:0.68rem;color:#555;font-weight:400}
 .footer{margin-top:16px;font-size:0.75rem;color:#666;line-height:1.8}
 @media print{body{padding:15px 20px}table{font-size:0.72rem}@page{margin:12mm 15mm}}
 </style></head><body>
@@ -614,6 +615,7 @@ td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}
   const weekdays=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const wday=weekdays[s0.getDay()];
   const region=d.name||'';
+  const regionEn=d.en||'';
   const dSpots=grouped[dayId]||[];
   const spotLines=dSpots.map(sp=>{
    const cn=sp.sn||sp.name;
@@ -630,7 +632,7 @@ td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}
    if(htl.addr)htlHtml+=`<div class="htl-addr">${htl.addr}</div>`;
    if(htl.tel)htlHtml+=`<div class="htl-tel">Tel: ${htl.tel}</div>`;
   }
-  html+=`<tr><td class="date-col">${dateStr}<br>(${wday})</td><td>${region}</td><td class="transport">${transport}</td><td class="spots-col">${spotLines||'—'}</td><td>${htlHtml}</td></tr>`;
+  html+=`<tr><td class="date-col">${dateStr}<br>(${wday})</td><td>${region}<br><span class="region-en">${regionEn}</span></td><td class="transport">${transport}</td><td class="spots-col">${spotLines||'—'}</td><td>${htlHtml}</td></tr>`;
  });
  html+=`</tbody></table>
 <div class="footer">
